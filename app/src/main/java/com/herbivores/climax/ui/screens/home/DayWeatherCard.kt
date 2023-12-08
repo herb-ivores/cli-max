@@ -53,6 +53,7 @@ fun DayWeatherCard(
                         Text(
                             text = "${dayWeather.temperature.celsius}°",
                             textAlign = TextAlign.End,
+                            style = typography.bodySmall,
                         )
                         Text(
                             text = "Feels like ${dayWeather.feelsLike.celsius}°",
