@@ -17,18 +17,19 @@ import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.models.domain.DayWeather
+import com.herbivores.climax.models.domain.ForecastWeather
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.VerticalSpacer
 
 @Composable
 fun HomeScreen(
     currentWeatherState: ApiState<CurrentWeather>,
-    dayWeathersState: ApiState<List<DayWeather>>,
+    forecastWeatherState: ApiState<ForecastWeather>,
     modifier: Modifier = Modifier,
 ) {
-    if (currentWeatherState is ApiState.Success && dayWeathersState is ApiState.Success) {
+    if (currentWeatherState is ApiState.Success && forecastWeatherState is ApiState.Success) {
         val currentWeather = currentWeatherState.data
-        val dayWeathers = dayWeathersState.data
+        val forecastWeather = forecastWeatherState.data
         
         Scaffold(modifier = modifier) { contentPadding ->
             LazyColumn(contentPadding = contentPadding) {
@@ -38,7 +39,7 @@ fun HomeScreen(
                         modifier = Modifier.fillParentMaxHeight(0.6f),
                     )
                 }
-                items(dayWeathers) { dayWeather ->
+                items(forecastWeather.forecast) { dayWeather ->
                     DayWeatherCard(
                         dayWeather = dayWeather,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -70,44 +71,47 @@ fun HomeScreenPreview() {
                     feelsLike = 32.celsius,
                 )
             ),
-            dayWeathersState = ApiState.Success(
-                listOf(
-                    DayWeather(
-                        day = "Wednesday",
-                        iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
-                        type = "Clear",
-                        temperature = 30.celsius,
-                        feelsLike = 32.celsius,
+            forecastWeatherState = ApiState.Success(
+                ForecastWeather(
+                    location = "Angeles",
+                    forecast = listOf(
+                        DayWeather(
+                            day = "Wednesday",
+                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            type = "Clear",
+                            temperature = 30.celsius,
+                            feelsLike = 32.celsius,
+                        ),
+                        DayWeather(
+                            day = "Thursday",
+                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            type = "Clear",
+                            temperature = 30.celsius,
+                            feelsLike = 32.celsius,
+                        ),
+                        DayWeather(
+                            day = "Friday",
+                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            type = "Clear",
+                            temperature = 30.celsius,
+                            feelsLike = 32.celsius,
+                        ),
+                        DayWeather(
+                            day = "Saturday",
+                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            type = "Clear",
+                            temperature = 30.celsius,
+                            feelsLike = 32.celsius,
+                        ),
+                        DayWeather(
+                            day = "Sunday",
+                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            type = "Clear",
+                            temperature = 30.celsius,
+                            feelsLike = 32.celsius,
+                        ),
                     ),
-                    DayWeather(
-                        day = "Thursday",
-                        iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
-                        type = "Clear",
-                        temperature = 30.celsius,
-                        feelsLike = 32.celsius,
-                    ),
-                    DayWeather(
-                        day = "Friday",
-                        iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
-                        type = "Clear",
-                        temperature = 30.celsius,
-                        feelsLike = 32.celsius,
-                    ),
-                    DayWeather(
-                        day = "Saturday",
-                        iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
-                        type = "Clear",
-                        temperature = 30.celsius,
-                        feelsLike = 32.celsius,
-                    ),
-                    DayWeather(
-                        day = "Sunday",
-                        iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
-                        type = "Clear",
-                        temperature = 30.celsius,
-                        feelsLike = 32.celsius,
-                    ),
-                )
+                ),
             ),
         )
     }

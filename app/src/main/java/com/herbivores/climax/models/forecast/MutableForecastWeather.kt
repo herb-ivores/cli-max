@@ -1,8 +1,7 @@
 package com.herbivores.climax.models.forecast
 
 import com.google.gson.annotations.SerializedName
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.herbivores.climax.models.domain.ForecastWeather
 
 data class MutableForecastWeather(
     @SerializedName("cod")
@@ -12,12 +11,12 @@ data class MutableForecastWeather(
     @SerializedName("cnt")
     var cnt  : Int? = null,
     @SerializedName("list")
-    var list : ArrayList<MutableList> = arrayListOf(),
+    var list : ArrayList<List> = arrayListOf(),
     @SerializedName("city")
     var city : City?  = City()
 ){
     fun toForecastWeather() = ForecastWeather(
         location = city?.name.orEmpty(),
-        forecast = ArrayList(list.map { it.toList() })
+        forecast = list.map { it.toDayWeather() },
     )
 }
