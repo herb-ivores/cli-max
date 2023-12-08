@@ -7,6 +7,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.herbivores.climax.apiclient.ApiState
 import com.herbivores.climax.constants.WeatherApi
@@ -26,7 +30,7 @@ fun HomeScreen(
         val dayWeathers = dayWeathersState.data
         
         Scaffold(modifier = modifier) { contentPadding ->
-            LazyColumn(modifier = Modifier.padding(contentPadding)) {
+            LazyColumn(contentPadding = contentPadding) {
                 item {
                     CurrentWeatherHeader(
                         currentWeather = currentWeather,
@@ -44,6 +48,11 @@ fun HomeScreen(
         }
     }
 }
+
+@PreviewScreenSizes
+@PreviewFontScale
+@PreviewLightDark
+@PreviewDynamicColors
 @Preview
 @Composable
 fun HomeScreenPreview() {
@@ -97,6 +106,6 @@ fun HomeScreenPreview() {
                     feelsLike = 32.celsius,
                 ),
             )
-        )
+        ),
     )
 }
