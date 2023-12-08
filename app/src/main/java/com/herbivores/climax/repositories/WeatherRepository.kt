@@ -1,8 +1,10 @@
 package com.herbivores.climax.repositories
 
 import com.herbivores.climax.apiclient.WeatherApiClient
+import com.herbivores.climax.constants.ForecastWeatherApi
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.current.MutableCurrentWeather
+import com.herbivores.climax.models.forecast.MutableForecastWeather
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,4 +17,11 @@ class WeatherRepository {
                 .getCurrentWeather(latitude, longitude, WeatherApi.KEY, "metric")
         )
     }.flowOn(Dispatchers.IO)
+
+    fun getForecastWeather(latitude: Double,longitude: Double): Flow<MutableForecastWeather> = flow{
+        emit(
+            WeatherApiClient.retrofit.create(ForeWeather::class.java)
+                .getForecastWeather(latitude, longitude, ForecastWeatherApi.KEY, "metric")
+        )
+    }
 }

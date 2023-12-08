@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,14 +16,19 @@ import coil.compose.AsyncImage
 import com.herbivores.climax.apiclient.ApiState
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.current.CurrentWeather
+import com.herbivores.climax.models.forecast.ForecastWeather
+import com.herbivores.climax.models.forecast.List
+import com.herbivores.climax.models.forecast.MutableForecastWeather
 
 @Composable
 fun HomeScreen(
     currentWeatherState: ApiState<CurrentWeather>,
+    forecastWeatherState: ApiState<ForecastWeather>,
     modifier: Modifier = Modifier,
 ) {
-    if (currentWeatherState is ApiState.Success) {
+    if (currentWeatherState is ApiState.Success && forecastWeatherState is ApiState.Success) {
         val currentWeather = currentWeatherState.data
+        val forecastWeather = forecastWeatherState.data
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -38,6 +45,7 @@ fun HomeScreen(
             Text(text = currentWeather.temperature)
             Text(text = "Feels like ${currentWeather.feelsLike}")
         }
+
     }
 }
 
@@ -45,6 +53,31 @@ fun HomeScreen(
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(
+        forecastWeatherState = ApiState.Success(
+            ForecastWeather(
+                location = "Florida",
+                forecast = ArrayList<List>(
+                    listOf(
+                        List(
+                            iconName = "01d",
+                            type = "Clear",
+                            day = "Monday",
+                            time = "12:00 PM",
+                            temperature = "30 °C",
+                            feelsLike = "32 °C",
+                        ),
+                        List(
+                            iconName = "03d",
+                            type = "Clear",
+                            day = "Tuesday",
+                            time = "12:00 PM",
+                            temperature = "30 °C",
+                            feelsLike = "32 °C",
+                        ),
+                    )
+                )
+            )
+        ),
         currentWeatherState = ApiState.Success(
             CurrentWeather(
                 location = "Angeles",
