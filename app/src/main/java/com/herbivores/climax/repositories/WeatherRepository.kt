@@ -2,7 +2,7 @@ package com.herbivores.climax.repositories
 
 import com.herbivores.climax.apiclient.WeatherApiClient
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.MutableCurrentWeather
+import com.herbivores.climax.models.current.MutableCurrentWeather
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

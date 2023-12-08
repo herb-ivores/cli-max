@@ -1,4 +1,4 @@
-package com.herbivores.climax.models
+package com.herbivores.climax.models.current
 
 import com.google.gson.annotations.SerializedName
 import java.text.SimpleDateFormat

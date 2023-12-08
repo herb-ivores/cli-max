@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.herbivores.climax.apiclient.ApiState
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.CurrentWeather
+import com.herbivores.climax.models.current.CurrentWeather
 
 @Composable
 fun HomeScreen(

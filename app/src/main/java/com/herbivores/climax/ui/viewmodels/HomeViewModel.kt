@@ -3,7 +3,7 @@ package com.herbivores.climax.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.herbivores.climax.apiclient.ApiState
-import com.herbivores.climax.models.CurrentWeather
+import com.herbivores.climax.models.current.CurrentWeather
 import com.herbivores.climax.repositories.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private var weatherRepository: WeatherRepository) : ViewModel() {
+class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewModel() {
     private val _state = MutableStateFlow<ApiState<CurrentWeather>>(ApiState.Empty())
     val state = _state.asStateFlow()
 

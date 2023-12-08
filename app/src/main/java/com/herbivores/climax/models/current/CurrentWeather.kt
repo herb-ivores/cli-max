@@ -1,4 +1,4 @@
-package com.herbivores.climax.models
+package com.herbivores.climax.models.current
 
 data class CurrentWeather(
     val location: String,
