@@ -14,3 +14,4 @@ interface Weather {
         @Query("units") units: String
     ): MutableCurrentWeather
 }
+
