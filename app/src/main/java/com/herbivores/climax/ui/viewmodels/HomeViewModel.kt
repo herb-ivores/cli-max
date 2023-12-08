@@ -3,7 +3,7 @@ package com.herbivores.climax.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.herbivores.climax.apiclient.ApiState
-import com.herbivores.climax.models.current.CurrentWeather
+import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.repositories.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

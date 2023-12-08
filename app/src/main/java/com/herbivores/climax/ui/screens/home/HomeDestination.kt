@@ -16,5 +16,7 @@ fun Home() {
     val viewModel = viewModel { HomeViewModel(WeatherRepository()) }
 
     val currentWeatherState by viewModel.state.collectAsState()
-    HomeScreen(currentWeatherState = currentWeatherState)
+//    HomeScreen(
+//        currentWeatherState = currentWeatherState
+//    )
 }

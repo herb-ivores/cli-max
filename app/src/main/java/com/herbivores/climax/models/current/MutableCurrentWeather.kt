@@ -1,6 +1,9 @@
 package com.herbivores.climax.models.current
 
 import com.google.gson.annotations.SerializedName
+import com.herbivores.climax.constants.WeatherApi
+import com.herbivores.climax.models.celsius
+import com.herbivores.climax.models.domain.CurrentWeather
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -36,11 +39,11 @@ data class MutableCurrentWeather(
 ) {
     fun toCurrentWeather() = CurrentWeather(
         location = name ?: "",
-        iconName = weather.firstOrNull()?.icon ?: "",
+        iconUrl = "${WeatherApi.IMAGE_BASE_URL}${weather.firstOrNull()?.icon ?: ""}@2x.png",
         type = weather.firstOrNull()?.main ?: "",
         day = SimpleDateFormat("hh:mm aa", Locale.ENGLISH).format((dt ?: 0) * 1000),
         time = SimpleDateFormat("EEEE", Locale.ENGLISH).format((dt ?: 0) * 1000),
-        temperature = "${main?.temp} °C",
-        feelsLike = "${main?.feelsLike} °C",
+        temperature = (main?.temp ?: 0.0).celsius,
+        feelsLike = (main?.feelsLike ?: 0.0).celsius,
     )
 }
