@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class Rain (
 
-    @SerializedName("3h" ) var h : Double? = null
+    @SerializedName("3h" )
+    var h : Double? = null
 
 )
