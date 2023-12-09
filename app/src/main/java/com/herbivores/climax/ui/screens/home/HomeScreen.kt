@@ -98,9 +98,7 @@ fun HomeScreen(
                 }
             } else if (forecastWeatherState is Loading) {
                 items(5) {
-                    DayWeatherCard(
-                        dayWeather = null,
-                    )
+                    DayWeatherCard(dayWeather = null)
                 }
             }
         }
