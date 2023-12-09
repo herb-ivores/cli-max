@@ -30,7 +30,7 @@ data class List (
     var dtTxt: String? = null
 ){
     fun toDayWeather() = DayWeather(
-        iconUrl = "${WeatherApi.IMAGE_BASE_URL}${weather.firstOrNull()?.icon ?: ""}@2x.png",
+        iconUrl = WeatherApi.getIconUrl(weather.firstOrNull()?.icon ?: ""),
         type = weather.firstOrNull()?.main.orEmpty(),
         day = SimpleDateFormat("hh:mm aa", Locale.ENGLISH).format((dt?: 0 )* 1000),
         temperature = (main?.temp ?: 0.0).celsius,

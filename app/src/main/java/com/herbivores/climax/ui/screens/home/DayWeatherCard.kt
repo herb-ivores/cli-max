@@ -77,7 +77,7 @@ fun DayWeatherCardPreview() {
         DayWeatherCard(
             dayWeather = DayWeather(
                 day = "Monday",
-                iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                iconUrl = "${WeatherApi.ICON_BASE_URL}01d@2x.png",
                 type = "Clear",
                 temperature = 30.celsius,
                 feelsLike = 32.celsius,

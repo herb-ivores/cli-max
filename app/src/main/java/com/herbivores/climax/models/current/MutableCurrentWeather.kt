@@ -39,7 +39,7 @@ data class MutableCurrentWeather(
 ) {
     fun toCurrentWeather() = CurrentWeather(
         location = name ?: "",
-        iconUrl = "${WeatherApi.IMAGE_BASE_URL}${weather.firstOrNull()?.icon ?: ""}@2x.png",
+        iconUrl = WeatherApi.getIconUrl(weather.firstOrNull()?.icon ?: ""),
         type = weather.firstOrNull()?.main ?: "",
         day = SimpleDateFormat("hh:mm aa", Locale.ENGLISH).format((dt ?: 0) * 1000),
         time = SimpleDateFormat("EEEE", Locale.ENGLISH).format((dt ?: 0) * 1000),

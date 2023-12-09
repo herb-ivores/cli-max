@@ -63,7 +63,7 @@ fun HomeScreenPreview() {
             currentWeatherState = ApiState.Success(
                 CurrentWeather(
                     location = "Angeles",
-                    iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                    iconUrl = "${WeatherApi.ICON_BASE_URL}01d@2x.png",
                     type = "Clear",
                     day = "Monday",
                     time = "12:00 PM",
@@ -77,35 +77,35 @@ fun HomeScreenPreview() {
                     forecast = listOf(
                         DayWeather(
                             day = "Wednesday",
-                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            iconUrl = "${WeatherApi.ICON_BASE_URL}01d@2x.png",
                             type = "Clear",
                             temperature = 30.celsius,
                             feelsLike = 32.celsius,
                         ),
                         DayWeather(
                             day = "Thursday",
-                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            iconUrl = "${WeatherApi.ICON_BASE_URL}01d@2x.png",
                             type = "Clear",
                             temperature = 30.celsius,
                             feelsLike = 32.celsius,
                         ),
                         DayWeather(
                             day = "Friday",
-                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            iconUrl = "${WeatherApi.ICON_BASE_URL}01d@2x.png",
                             type = "Clear",
                             temperature = 30.celsius,
                             feelsLike = 32.celsius,
                         ),
                         DayWeather(
                             day = "Saturday",
-                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            iconUrl = "${WeatherApi.ICON_BASE_URL}01d@2x.png",
                             type = "Clear",
                             temperature = 30.celsius,
                             feelsLike = 32.celsius,
                         ),
                         DayWeather(
                             day = "Sunday",
-                            iconUrl = "${WeatherApi.IMAGE_BASE_URL}01d@2x.png",
+                            iconUrl = "${WeatherApi.ICON_BASE_URL}01d@2x.png",
                             type = "Clear",
                             temperature = 30.celsius,
                             feelsLike = 32.celsius,
