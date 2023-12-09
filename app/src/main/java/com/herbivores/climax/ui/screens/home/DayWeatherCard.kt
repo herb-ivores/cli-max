@@ -2,11 +2,16 @@ package com.herbivores.climax.ui.screens.home
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,46 +20,51 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.celsius
 import com.herbivores.climax.models.domain.DayWeather
+import com.herbivores.climax.models.domain.HourWeather
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.HorizontalSpacer
 import com.thebrownfoxx.components.extension.rememberMutableStateOf
 import io.github.fornewid.placeholder.material3.placeholder
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayWeatherCard(
     dayWeather: DayWeather?,
     modifier: Modifier = Modifier,
-    expanded: Boolean = false,
+    expanded: Boolean,
+    selectedDay: (String)-> Unit,
 ) {
     var previousDayWeather by rememberMutableStateOf<DayWeather?>(null)
-
     LaunchedEffect(dayWeather) {
         if (dayWeather != null) {
             previousDayWeather = dayWeather
         }
     }
-
+//    var expanded by remember { mutableStateOf (false) }
     val dayWeatherToShow = dayWeather ?: previousDayWeather
-    
-    Card(modifier = modifier.animateContentSize()) {
+
+    Card(
+        modifier = modifier.animateContentSize(),
+        onClick = {selectedDay(dayWeather!!.day)}
+    ) {
         Crossfade(targetState = expanded, label = "") { expanded ->
-            if (!expanded) {
+            Column {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(16.dp),
                 ) {
                     AsyncImage(
-                        model = dayWeatherToShow?.iconUrl,
+                        model = dayWeatherToShow?.hourlyWeather?.firstOrNull()?.iconUrl,
                         contentDescription = "Weather icon",
                         modifier = Modifier
                             .placeholder(dayWeatherToShow == null)
@@ -62,30 +72,41 @@ fun DayWeatherCard(
                     )
                     HorizontalSpacer(width = 8.dp)
                     Text(
-                        text = dayWeatherToShow?.day ?: "Cumday",
+                        text = dayWeatherToShow?.day?: "Cumday",
                         style = typography.titleSmall,
                         modifier = Modifier
                             .placeholder(dayWeatherToShow == null)
                             .weight(1f),
                     )
-                    HorizontalSpacer(width = 32.dp)
-                    Column(
-                        horizontalAlignment = Alignment.End,
-                        modifier = Modifier.placeholder(dayWeatherToShow == null),
-                    ) {
-                        Text(
-                            text = "${dayWeatherToShow?.temperature?.celsius ?: 69}°",
-                            textAlign = TextAlign.End,
-                            style = typography.bodySmall,
-                        )
-                        Text(
-                            text = "Feels like ${dayWeatherToShow?.feelsLike?.celsius ?: 69}°",
-                            textAlign = TextAlign.End,
-                            style = typography.labelSmall,
-                        )
+                }
+                if(expanded){
+                    Row(
+                        modifier = Modifier.placeholder(dayWeatherToShow == null)
+                            .horizontalScroll(rememberScrollState())
+                    ){
+                        dayWeather?.hourlyWeather?.forEach{forecast ->
+                            Box(modifier = Modifier.padding(6.dp)){
+                                Column(
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(text = "${forecast.temperature.celsius}°")
+                                    AsyncImage(
+                                        model = forecast.iconUrl,
+                                        contentDescription = "weather icon",
+                                        modifier = Modifier
+                                            .size(24.dp),
+                                    )
+                                    Text(text = forecast.time, fontSize = 14.sp)
+                                }
+                            }
+                        }
                     }
                 }
             }
+
+
+
         }
     }
 }
@@ -100,12 +121,20 @@ fun DayWeatherCardPreview() {
         DayWeatherCard(
             dayWeather = DayWeather(
                 day = "Monday",
-                iconUrl = WeatherApi.getIconUrl("01d"),
-                type = "Clear",
-                temperature = 30.celsius,
-                feelsLike = 32.celsius,
+                hourlyWeather = listOf(
+                    HourWeather(
+                        iconUrl = WeatherApi.getIconUrl("01d"),
+                        type = "Clear",
+                        temperature = 30.celsius,
+                        feelsLike = 32.celsius,
+                        time = "7AM"
+                    )
+                ),
+
             ),
             modifier = Modifier.padding(16.dp),
+            expanded = false,
+            selectedDay = {},
         )
     }
 }
@@ -120,6 +149,8 @@ fun DayWeatherCardNullPreview() {
         DayWeatherCard(
             dayWeather = null,
             modifier = Modifier.padding(16.dp),
+            selectedDay = {},
+            expanded = false
         )
     }
 }

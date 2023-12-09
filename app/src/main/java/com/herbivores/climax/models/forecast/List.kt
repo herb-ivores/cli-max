@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.celsius
 import com.herbivores.climax.models.domain.DayWeather
+import com.herbivores.climax.models.domain.HourWeather
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -29,11 +30,12 @@ data class List (
     @SerializedName("dt_txt")
     var dtTxt: String? = null
 ){
-    fun toDayWeather() = DayWeather(
+    fun toHourWeather() = HourWeather(
         iconUrl = WeatherApi.getIconUrl(weather.firstOrNull()?.icon ?: ""),
         type = weather.firstOrNull()?.main.orEmpty(),
-        day = SimpleDateFormat("hh:mm aa", Locale.ENGLISH).format((dt?: 0 )* 1000),
         temperature = (main?.temp ?: 0.0).celsius,
         feelsLike = (main?.feelsLike ?: 0.0).celsius,
+        time = SimpleDateFormat("hh a", Locale.ENGLISH).format((dt?: 0 )* 1000),
     )
+
 }

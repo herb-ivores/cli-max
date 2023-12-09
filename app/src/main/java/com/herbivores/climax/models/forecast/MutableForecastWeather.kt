@@ -1,7 +1,10 @@
 package com.herbivores.climax.models.forecast
 
 import com.google.gson.annotations.SerializedName
+import com.herbivores.climax.models.domain.DayWeather
 import com.herbivores.climax.models.domain.ForecastWeather
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 data class MutableForecastWeather(
     @SerializedName("cod")
@@ -16,7 +19,15 @@ data class MutableForecastWeather(
     var city : City?  = City()
 ){
     fun toForecastWeather() = ForecastWeather(
+
         location = city?.name.orEmpty(),
-        forecast = list.map { it.toDayWeather() },
+        dailyWeather = list.groupBy {
+            SimpleDateFormat("EEEE", Locale.ENGLISH).format((it.dt ?: 0) * 1000)
+        }.map { (day, hourWeatherList) ->
+            DayWeather(
+                day = day,
+                hourlyWeather = hourWeatherList.map { it.toHourWeather() }
+            )
+        }
     )
 }
