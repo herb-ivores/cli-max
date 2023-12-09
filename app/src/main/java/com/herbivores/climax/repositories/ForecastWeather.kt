@@ -5,7 +5,7 @@ import com.herbivores.climax.models.forecast.MutableForecastWeather
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ForeWeather {
+interface ForecastWeather {
     @GET(WeatherApi.FORECAST_WEATHER)
     suspend fun getForecastWeather(
         @Query("lat") lat : Double,

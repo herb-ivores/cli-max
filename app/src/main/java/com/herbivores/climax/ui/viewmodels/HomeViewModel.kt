@@ -2,9 +2,11 @@ package com.herbivores.climax.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hamthelegend.enchantmentorder.extensions.mapToStateFlow
 import com.herbivores.climax.apiclient.ApiState
 import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.models.domain.ForecastWeather
+import com.herbivores.climax.models.domain.Location
 import com.herbivores.climax.repositories.WeatherRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,22 +15,42 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewModel() {
-    private val _state = MutableStateFlow<ApiState<CurrentWeather>>(ApiState.Empty())
+    private val _location = MutableStateFlow(Location.Samples.first())
+    val location = _location.asStateFlow()
+
+    val locations = location.mapToStateFlow(scope = viewModelScope) { location ->
+        Location.Samples - location
+    }
+
+    private val _selectingLocation = MutableStateFlow(false)
+    val selectingLocation = _selectingLocation.asStateFlow()
+
+    private val _state = MutableStateFlow<ApiState<CurrentWeather>>(ApiState.Loading())
     val state = _state.asStateFlow()
 
-    private val _forecastState = MutableStateFlow<ApiState<ForecastWeather>>(ApiState.Empty())
+    private val _forecastState = MutableStateFlow<ApiState<ForecastWeather>>(ApiState.Loading())
     val forecastState = _forecastState.asStateFlow()
 
     init {
-        getCurrentWeather()
-        getForecastWeather()
+        viewModelScope.launch(Dispatchers.IO) {
+            location.collect { location ->
+                getCurrentWeather(location.latitude, location.longitude)
+                getForecastWeather(location.latitude, location.longitude)
+            }
+        }
     }
 
-    private fun getCurrentWeather() {
-        // Temporary hardcoded values for Angeles?
-        val latitude = 15.1463554
-        val longitude = 120.5245999
-        viewModelScope.launch(Dispatchers.IO) {
+    fun updateSelectingLocation(selectingLocation: Boolean) {
+        _selectingLocation.value = selectingLocation
+    }
+
+    fun updateLocation(location: Location) {
+        _location.value = location
+        _selectingLocation.value = false
+    }
+
+    private fun getCurrentWeather(latitude: Double, longitude: Double) {
+        viewModelScope.launch {
             _state.value = ApiState.Loading()
             weatherRepository.getCurrentWeather(latitude, longitude)
                 .catch { value ->
@@ -39,9 +61,7 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
         }
     }
 
-    private fun getForecastWeather() {
-        val latitude = 14.9351
-        val longitude = 120.4939
+    private fun getForecastWeather(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             _forecastState.value = ApiState.Loading()
             weatherRepository.getForecastWeather(latitude, longitude)

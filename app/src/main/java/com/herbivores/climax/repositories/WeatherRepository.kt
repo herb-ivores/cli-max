@@ -10,17 +10,19 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class WeatherRepository {
-    fun getCurrentWeather(latitude: Double, longitude: Double): Flow<MutableCurrentWeather> = flow {
-        emit(
-            WeatherApiClient.retrofit.create(Weather::class.java)
-                .getCurrentWeather(latitude, longitude, WeatherApi.KEY, "metric")
-        )
-    }.flowOn(Dispatchers.IO)
+    fun getCurrentWeather(latitude: Double, longitude: Double): Flow<MutableCurrentWeather> =
+        flow {
+            emit(
+                WeatherApiClient.retrofit.create(Weather::class.java)
+                    .getCurrentWeather(latitude, longitude, WeatherApi.KEY, "metric")
+            )
+        }.flowOn(Dispatchers.IO)
 
-    fun getForecastWeather(latitude: Double,longitude: Double): Flow<MutableForecastWeather> = flow{
-        emit(
-            WeatherApiClient.retrofit.create(ForeWeather::class.java)
-                .getForecastWeather(latitude, longitude, WeatherApi.KEY, "metric")
-        )
-    }
+    fun getForecastWeather(latitude: Double, longitude: Double): Flow<MutableForecastWeather> =
+        flow {
+            emit(
+                WeatherApiClient.retrofit.create(ForecastWeather::class.java)
+                    .getForecastWeather(latitude, longitude, WeatherApi.KEY, "metric")
+            )
+        }.flowOn(Dispatchers.IO)
 }

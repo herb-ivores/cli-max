@@ -4,14 +4,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.LocationOn
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
@@ -22,39 +21,45 @@ import coil.compose.AsyncImage
 import com.herbivores.climax.models.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.ui.theme.AppTheme
-import com.thebrownfoxx.components.HorizontalSpacer
+import com.thebrownfoxx.components.extension.rememberMutableStateOf
+import io.github.fornewid.placeholder.material3.placeholder
 
 @Composable
 fun CurrentWeatherHeader(
-    currentWeather: CurrentWeather,
+    currentWeather: CurrentWeather?,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier.padding(
-            start = 32.dp,
-            top = 64.dp,
-            end = 16.dp,
-            bottom = 64.dp,
-        ),
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(imageVector = Icons.TwoTone.LocationOn, contentDescription = "Location icon")
-                HorizontalSpacer(width = 8.dp)
-                Text(text = currentWeather.location, style = typography.titleLarge)
-            }
+    var previousCurrentWeather by rememberMutableStateOf<CurrentWeather?>(null)
+
+    LaunchedEffect(currentWeather) {
+        if (currentWeather != null) {
+            previousCurrentWeather = currentWeather
+        }
+    }
+
+    val currentWeatherToShow = currentWeather ?: previousCurrentWeather
+
+    Row(modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .placeholder(visible = currentWeather == null),
+        ) {
             Text(
-                text = "${currentWeather.temperature.celsius}°",
+                text = "${currentWeatherToShow?.temperature?.celsius ?: 69}°",
                 style = typography.displayLarge,
             )
-            Text(text = currentWeather.type, style = typography.titleLarge)
             Text(
-                text = "Feels like ${currentWeather.feelsLike.celsius}°",
+                text = currentWeatherToShow?.type ?: "Cum rain",
+                style = typography.titleLarge,
+            )
+            Text(
+                text = "Feels like ${currentWeatherToShow?.feelsLike?.celsius ?: 69}°",
                 style = typography.labelLarge,
             )
         }
         AsyncImage(
-            model = currentWeather.iconUrl,
+            model = currentWeatherToShow?.iconUrl,
             contentDescription = "Weather icon",
             modifier = Modifier.size(128.dp),
         )
@@ -78,7 +83,24 @@ fun CurrentWeatherHeaderPreview() {
                     time = "12:00 PM",
                     temperature = 30.celsius,
                     feelsLike = 32.celsius,
-                )
+                ),
+                modifier = Modifier.padding(32.dp)
+            )
+        }
+    }
+}
+
+@PreviewFontScale
+@PreviewLightDark
+@PreviewDynamicColors
+@Preview
+@Composable
+fun CurrentWeatherHeaderNullPreview() {
+    AppTheme {
+        Surface {
+            CurrentWeatherHeader(
+                currentWeather = null,
+                modifier = Modifier.padding(32.dp)
             )
         }
     }
