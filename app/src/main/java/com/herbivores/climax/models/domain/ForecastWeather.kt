@@ -2,5 +2,5 @@ package com.herbivores.climax.models.domain
 
 data class ForecastWeather(
     val location: String,
-    val forecast: List<DayWeather>,
+    val dailyWeather: List<DayWeather>,
 )

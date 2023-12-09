@@ -25,11 +25,15 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
     private val _selectingLocation = MutableStateFlow(false)
     val selectingLocation = _selectingLocation.asStateFlow()
 
+
     private val _state = MutableStateFlow<ApiState<CurrentWeather>>(ApiState.Loading())
     val state = _state.asStateFlow()
 
     private val _forecastState = MutableStateFlow<ApiState<ForecastWeather>>(ApiState.Loading())
     val forecastState = _forecastState.asStateFlow()
+
+    private val _selectedDay = MutableStateFlow("")
+    val selectedDay = _selectedDay.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -44,6 +48,9 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
         _selectingLocation.value = selectingLocation
     }
 
+    fun updateSelectedDay(day: String){
+        _selectedDay.value = day
+    }
     fun updateLocation(location: Location) {
         _location.value = location
         _selectingLocation.value = false
