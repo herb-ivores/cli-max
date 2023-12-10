@@ -169,6 +169,7 @@ fun HomeScreenPreview() {
                             sunset = LocalTime.MIDNIGHT,
                             sunrise = LocalTime.MIDNIGHT,
                             wind = Wind(30.0,Direction.EAST),
+                            iconUrl = WeatherApi.getIconUrl("01d"),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
@@ -187,6 +188,7 @@ fun HomeScreenPreview() {
                             sunset = LocalTime.MIDNIGHT,
                             sunrise = LocalTime.MIDNIGHT,
                             wind = Wind(30.0,Direction.EAST),
+                            iconUrl = WeatherApi.getIconUrl("01d"),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
@@ -205,6 +207,7 @@ fun HomeScreenPreview() {
                             sunset = LocalTime.MIDNIGHT,
                             sunrise = LocalTime.MIDNIGHT,
                             wind = Wind(30.0,Direction.EAST),
+                            iconUrl = WeatherApi.getIconUrl("01d"),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
@@ -223,6 +226,7 @@ fun HomeScreenPreview() {
                             sunset = LocalTime.MIDNIGHT,
                             sunrise = LocalTime.MIDNIGHT,
                             wind = Wind(30.0,Direction.EAST),
+                            iconUrl = WeatherApi.getIconUrl("01d"),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
@@ -241,6 +245,7 @@ fun HomeScreenPreview() {
                             sunset = LocalTime.MIDNIGHT,
                             sunrise = LocalTime.MIDNIGHT,
                             wind = Wind(30.0,Direction.EAST),
+                            iconUrl = WeatherApi.getIconUrl("01d"),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),

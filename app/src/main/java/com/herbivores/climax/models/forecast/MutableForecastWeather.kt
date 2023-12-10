@@ -1,6 +1,7 @@
 package com.herbivores.climax.models.forecast
 
 import com.google.gson.annotations.SerializedName
+import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.domain.DayWeather
 import com.herbivores.climax.models.domain.ForecastWeather
 import com.herbivores.climax.models.domain.Temperature
@@ -38,6 +39,14 @@ data class MutableForecastWeather(
                     .atZone(ZoneId.systemDefault())
                     .toLocalTime(),
                 hourlyWeather = hourWeatherList.map { it.toHourWeather() },
+                iconUrl = WeatherApi.getIconUrl(
+                    hourWeatherList
+                        .flatMap { it.weather }
+                        .groupBy { it.icon }
+                        .maxByOrNull { it.value.size }
+                        ?.key
+                        ?: ""
+                )
             )
         }
     )

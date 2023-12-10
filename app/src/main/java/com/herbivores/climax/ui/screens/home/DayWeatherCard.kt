@@ -74,7 +74,7 @@ fun DayWeatherCard(
                 modifier = Modifier.padding(16.dp),
             ) {
                 AsyncImage(
-                    model = dayWeatherToShow?.hourlyWeather?.firstOrNull()?.iconUrl,
+                    model = dayWeatherToShow?.iconUrl,
                     contentDescription = "Weather icon",
                     modifier = Modifier
                         .placeholder(dayWeatherToShow == null)
@@ -136,9 +136,10 @@ fun DayWeatherCardPreview() {
                 maxTemperature = Temperature(27.0),
                 sunset = LocalTime.MIDNIGHT,
                 sunrise = LocalTime.MIDNIGHT,
-                wind = Wind(30.0, Direction.EAST)
+                wind = Wind(30.0, Direction.EAST),
+                iconUrl = WeatherApi.getIconUrl("01d"),
             ),
-            expanded = false,
+            expanded = true,
             onClick = {},
             modifier = Modifier.padding(16.dp),
         )
@@ -161,6 +162,7 @@ fun DayWeatherCardExpandedPreview() {
                 sunset = LocalTime.MIDNIGHT,
                 sunrise = LocalTime.MIDNIGHT,
                 wind = Wind(30.0, Direction.EAST),
+                iconUrl = WeatherApi.getIconUrl("01d"),
                 hourlyWeather = listOf(
                     HourWeather(
                         iconUrl = WeatherApi.getIconUrl("01d"),

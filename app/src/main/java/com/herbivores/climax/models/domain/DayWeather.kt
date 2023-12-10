@@ -5,6 +5,7 @@ import java.time.LocalTime
 
 data class DayWeather(
     val date: LocalDate,
+    val iconUrl: String,
     val maxTemperature: Temperature,
     val maxFeelsLike: Temperature,
     val wind: Wind,
