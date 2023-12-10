@@ -33,13 +33,13 @@ fun LocationPicker(
     location: Location,
     locations: List<Location>,
     selectingLocation: Boolean,
-    onSelectingLocationChange: (Boolean) -> Unit,
+    onClick: () -> Unit,
     onLocationSelect: (Location) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier,
-        onClick = { onSelectingLocationChange(!selectingLocation) }
+        onClick = onClick,
     ) {
         Column {
             Row(
@@ -95,7 +95,7 @@ fun LocationPickerPreview() {
             location = remember { Location.Samples.first() },
             locations = remember { Location.Samples - Location.Samples.first() },
             selectingLocation = false,
-            onSelectingLocationChange = {},
+            onClick = {},
             onLocationSelect = {},
         )
     }
@@ -112,7 +112,7 @@ fun LocationPickerExpandedPreview() {
             location = remember { Location.Samples.first() },
             locations = remember { Location.Samples - Location.Samples.first() },
             selectingLocation = true,
-            onSelectingLocationChange = {},
+            onClick = {},
             onLocationSelect = {},
         )
     }

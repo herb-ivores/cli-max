@@ -1,10 +1,13 @@
 package com.herbivores.climax.ui.screens.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -25,6 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.herbivores.climax.apiclient.ApiState
+import com.herbivores.climax.apiclient.ApiState.Failure
 import com.herbivores.climax.apiclient.ApiState.Loading
 import com.herbivores.climax.apiclient.ApiState.Success
 import com.herbivores.climax.constants.WeatherApi
@@ -40,7 +44,6 @@ import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.Elevation
-import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.components.extension.plus
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -51,12 +54,15 @@ fun HomeScreen(
     location: Location,
     locations: List<Location>,
     selectingLocation: Boolean,
-    onSelectingLocationChange: (Boolean) -> Unit,
+    onToggleSelectingLocation: () -> Unit,
     onLocationSelect: (Location) -> Unit,
     currentWeatherState: ApiState<CurrentWeather>,
+    currentWeatherExpanded: Boolean,
+    onToggleCurrentWeatherExpanded: () -> Unit,
     forecastWeatherState: ApiState<ForecastWeather>,
     selectedDay: DayWeather?,
     onSelectedDayChange: (DayWeather) -> Unit,
+    onReload: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
@@ -74,13 +80,20 @@ fun HomeScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            Surface(tonalElevation = elevation) {
-                Column(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) {
+            Surface(
+                tonalElevation = elevation,
+                onClick = onToggleCurrentWeatherExpanded,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .windowInsetsPadding(WindowInsets.statusBars)
+                        .animateContentSize(),
+                ) {
                     LocationPicker(
                         location = location,
                         locations = locations,
                         selectingLocation = selectingLocation,
-                        onSelectingLocationChange = onSelectingLocationChange,
+                        onClick = onToggleSelectingLocation,
                         onLocationSelect = onLocationSelect,
                         modifier = Modifier.padding(16.dp),
                     )
@@ -90,33 +103,48 @@ fun HomeScreen(
 
                         CurrentWeatherHeader(
                             currentWeather = currentWeather,
-                            modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 32.dp),
+                            modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 16.dp),
                         )
+                        AnimatedVisibility(visible = currentWeatherExpanded) {
+                            CurrentWeatherDetails(
+                                currentWeather = currentWeather,
+                                modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 16.dp),
+                            )
+                        }
                     }
                 }
             }
         }
     ) { contentPadding ->
-        LazyColumn(
-            contentPadding = contentPadding + PaddingValues(16.dp) - PaddingValues(top = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            state = lazyListState,
-        ) {
-            if (forecastWeatherState is Success) {
-                items(items = forecastWeatherState.data.dailyWeather) { dayWeather ->
-                    DayWeatherCard(
-                        dayWeather = dayWeather,
-                        expanded = selectedDay == dayWeather,
-                        onClick = { onSelectedDayChange(dayWeather) },
-                    )
-                }
-            } else if (forecastWeatherState is Loading) {
-                items(5) {
-                    DayWeatherCard(
-                        dayWeather = null,
-                        expanded = false,
-                        onClick = {},
-                    )
+        if (currentWeatherState is Failure || forecastWeatherState is Failure) {
+            ErrorLoading(
+                onReload = onReload,
+                modifier = Modifier
+                    .padding(contentPadding + PaddingValues(32.dp))
+                    .fillMaxSize(),
+            )
+        } else {
+            LazyColumn(
+                contentPadding = contentPadding + PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                state = lazyListState,
+            ) {
+                if (forecastWeatherState is Success) {
+                    items(items = forecastWeatherState.data.dailyWeather) { dayWeather ->
+                        DayWeatherCard(
+                            dayWeather = dayWeather,
+                            expanded = selectedDay == dayWeather,
+                            onClick = { onSelectedDayChange(dayWeather) },
+                        )
+                    }
+                } else if (forecastWeatherState is Loading) {
+                    items(5) {
+                        DayWeatherCard(
+                            dayWeather = null,
+                            expanded = false,
+                            onClick = {},
+                        )
+                    }
                 }
             }
         }
@@ -135,7 +163,7 @@ fun HomeScreenPreview() {
             location = remember { Location.Samples.first() },
             locations = remember { Location.Samples - Location.Samples.first() },
             selectingLocation = false,
-            onSelectingLocationChange = {},
+            onToggleSelectingLocation = {},
             onLocationSelect = {},
             currentWeatherState = Success(
                 CurrentWeather(
@@ -157,6 +185,8 @@ fun HomeScreenPreview() {
                     sunset = LocalTime.now(),
                 ),
             ),
+            currentWeatherExpanded = false,
+            onToggleCurrentWeatherExpanded = {},
             forecastWeatherState = Success(
                 ForecastWeather(
                     location = "Angeles",
@@ -261,6 +291,7 @@ fun HomeScreenPreview() {
             ),
             selectedDay = null,
             onSelectedDayChange = {},
+            onReload = {},
         )
     }
 }

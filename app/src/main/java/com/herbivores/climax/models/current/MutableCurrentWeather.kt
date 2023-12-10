@@ -36,8 +36,8 @@ data class MutableCurrentWeather(
     var name: String? = null,
     @SerializedName("cod")
     var cod: Int? = null,
-    @SerializedName("precipitation.value")
-    var precipitationValue: Double? = null,
+    @SerializedName("precipitation")
+    var precipitation: Precipitation? = null,
 ) {
     fun toCurrentWeather() = CurrentWeather(
         location = name ?: "",
@@ -55,7 +55,7 @@ data class MutableCurrentWeather(
         humidityPercent = main?.humidity ?: 0,
         pressureMillibars = main?.pressure ?: 0,
         visibility = (visibility ?: 0).meters,
-        precipitationMillimeters = precipitationValue ?: 0.0,
+        precipitationMillimeters = precipitation?.value ?: 0.0,
         sunrise = Instant.ofEpochSecond(sys?.sunrise ?: 0)
             .atZone(ZoneId.systemDefault())
             .toLocalTime(),

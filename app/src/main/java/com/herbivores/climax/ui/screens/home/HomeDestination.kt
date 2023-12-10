@@ -17,6 +17,7 @@ fun Home() {
     val locations by viewModel.locations.collectAsStateWithLifecycle()
     val selectingLocation by viewModel.selectingLocation.collectAsStateWithLifecycle()
     val currentWeatherState by viewModel.state.collectAsStateWithLifecycle()
+    val currentWeatherExpanded by viewModel.currentWeatherExpanded.collectAsStateWithLifecycle()
     val forecastWeatherState by viewModel.forecastState.collectAsStateWithLifecycle()
     val selectedDay by viewModel.selectedDayWeather.collectAsStateWithLifecycle()
 
@@ -24,11 +25,14 @@ fun Home() {
         location = location,
         locations = locations,
         selectingLocation = selectingLocation,
-        onSelectingLocationChange = viewModel::updateSelectingLocation,
+        onToggleSelectingLocation = viewModel::toggleSelectingLocation,
         onLocationSelect = viewModel::updateLocation,
         currentWeatherState = currentWeatherState,
+        currentWeatherExpanded = currentWeatherExpanded,
+        onToggleCurrentWeatherExpanded = viewModel::toggleCurrentWeatherExpanded,
         forecastWeatherState = forecastWeatherState,
         selectedDay = selectedDay,
         onSelectedDayChange = viewModel::updateSelectedDay,
+        onReload = viewModel::reload,
     )
 }

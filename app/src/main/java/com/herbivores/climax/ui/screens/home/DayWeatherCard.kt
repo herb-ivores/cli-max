@@ -80,7 +80,7 @@ fun DayWeatherCard(
                         .placeholder(dayWeatherToShow == null)
                         .size(24.dp),
                 )
-                HorizontalSpacer(width = 8.dp)
+                HorizontalSpacer(width = 16.dp)
                 Text(
                     text = day,
                     style = typography.titleSmall,
