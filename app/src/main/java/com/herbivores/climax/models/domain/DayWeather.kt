@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 data class DayWeather(
-    val date: LocalDate, // Replace day with this (date). We'll just format the day in the UI.
+    val date: LocalDate,
     val maxTemperature: Temperature,
     val maxFeelsLike: Temperature,
     val wind: Wind,

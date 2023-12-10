@@ -1,14 +1,15 @@
 package com.herbivores.climax.ui.screens.home
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
@@ -24,7 +25,6 @@ import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.domain.DayWeather
@@ -35,6 +35,7 @@ import com.herbivores.climax.models.domain.Wind
 import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.HorizontalSpacer
+import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.components.extension.rememberMutableStateOf
 import io.github.fornewid.placeholder.material3.placeholder
 import java.time.LocalDate
@@ -58,13 +59,14 @@ fun DayWeatherCard(
     }
 
     val dayWeatherToShow = dayWeather ?: previousDayWeather
+    val day = dayWeatherToShow?.date?.dayOfWeek?.name
+        ?.lowercase()
+        ?.replaceFirstChar { it.uppercase() }
+        ?: "Cumday"
 
     Card(
         modifier = modifier,
         onClick = { onClick() },
-        // You cannot call dayWeather!!.day here because it can be null when loading,
-        // and clicking the loading card will crash the app.
-        // Always use ?. over !!. if it wouldn't really make writing the code harder.
     ) {
         Column {
             Row(
@@ -80,7 +82,7 @@ fun DayWeatherCard(
                 )
                 HorizontalSpacer(width = 8.dp)
                 Text(
-                    text = dayWeatherToShow?.date?.dayOfWeek?.name ?: "Cumday",
+                    text = day,
                     style = typography.titleSmall,
                     modifier = Modifier
                         .placeholder(dayWeatherToShow == null)
@@ -88,26 +90,28 @@ fun DayWeatherCard(
                 )
             }
             AnimatedVisibility(visible = expanded) {
-                Row(
+                LazyRow(
+                    contentPadding = PaddingValues(16.dp) - PaddingValues(top = 16.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
                     modifier = Modifier
-                        .placeholder(dayWeatherToShow == null)
-                        .horizontalScroll(rememberScrollState()),
+                        .fillMaxWidth()
+                        .placeholder(dayWeatherToShow == null),
                 ) {
-                    dayWeather?.hourlyWeather?.forEach { forecast ->
-                        Box(modifier = Modifier.padding(6.dp)) {
-                            Column(
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = "${forecast.temperature.celsius}°")
-                                AsyncImage(
-                                    model = forecast.iconUrl,
-                                    contentDescription = "weather icon",
-                                    modifier = Modifier
-                                        .size(24.dp),
-                                )
-                                Text(text = forecast.time.format(DateTimeFormatter.ofPattern("h a")), fontSize = 14.sp)
-                            }
+                    items(dayWeather?.hourlyWeather ?: emptyList()) { hourWeather ->
+                        val time = hourWeather.time
+                            .format(DateTimeFormatter.ofPattern("h a"))
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Text(text = "${hourWeather.temperature.celsius}°")
+                            AsyncImage(
+                                model = hourWeather.iconUrl,
+                                contentDescription = "Weather icon",
+                                modifier = Modifier.size(24.dp),
+                            )
+                            Text(text = time, style = typography.labelSmall)
                         }
                     }
                 }
@@ -132,7 +136,7 @@ fun DayWeatherCardPreview() {
                 maxTemperature = Temperature(27.0),
                 sunset = LocalTime.MIDNIGHT,
                 sunrise = LocalTime.MIDNIGHT,
-                wind = Wind(30.0,Direction.EAST)
+                wind = Wind(30.0, Direction.EAST)
             ),
             expanded = false,
             onClick = {},
@@ -156,7 +160,7 @@ fun DayWeatherCardExpandedPreview() {
                 maxTemperature = Temperature(27.0),
                 sunset = LocalTime.MIDNIGHT,
                 sunrise = LocalTime.MIDNIGHT,
-                wind = Wind(30.0,Direction.EAST),
+                wind = Wind(30.0, Direction.EAST),
                 hourlyWeather = listOf(
                     HourWeather(
                         iconUrl = WeatherApi.getIconUrl("01d"),
