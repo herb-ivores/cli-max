@@ -28,7 +28,7 @@ import com.herbivores.climax.apiclient.ApiState
 import com.herbivores.climax.apiclient.ApiState.Loading
 import com.herbivores.climax.apiclient.ApiState.Success
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.celsius
+import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.models.domain.DayWeather
 import com.herbivores.climax.models.domain.ForecastWeather
