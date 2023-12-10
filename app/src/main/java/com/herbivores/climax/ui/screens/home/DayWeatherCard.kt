@@ -1,7 +1,6 @@
 package com.herbivores.climax.ui.screens.home
 
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,11 +39,12 @@ import io.github.fornewid.placeholder.material3.placeholder
 @Composable
 fun DayWeatherCard(
     dayWeather: DayWeather?,
-    modifier: Modifier = Modifier,
     expanded: Boolean,
-    onSelectedDayChange: (String)-> Unit,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var previousDayWeather by rememberMutableStateOf<DayWeather?>(null)
+
     LaunchedEffect(dayWeather) {
         if (dayWeather != null) {
             previousDayWeather = dayWeather
@@ -54,59 +54,58 @@ fun DayWeatherCard(
     val dayWeatherToShow = dayWeather ?: previousDayWeather
 
     Card(
-        modifier = modifier.animateContentSize(),
-        onClick = {onSelectedDayChange(dayWeather!!.day)}
+        modifier = modifier,
+        onClick = { onClick() },
+        // You cannot call dayWeather!!.day here because it can be null when loading,
+        // and clicking the loading card will crash the app.
+        // Always use ?. over !!. if it wouldn't really make writing the code harder.
     ) {
-        Crossfade(targetState = expanded, label = "") { expanded ->
-            Column {
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(16.dp),
+            ) {
+                AsyncImage(
+                    model = dayWeatherToShow?.hourlyWeather?.firstOrNull()?.iconUrl,
+                    contentDescription = "Weather icon",
+                    modifier = Modifier
+                        .placeholder(dayWeatherToShow == null)
+                        .size(24.dp),
+                )
+                HorizontalSpacer(width = 8.dp)
+                Text(
+                    text = dayWeatherToShow?.day ?: "Cumday",
+                    style = typography.titleSmall,
+                    modifier = Modifier
+                        .placeholder(dayWeatherToShow == null)
+                        .weight(1f),
+                )
+            }
+            AnimatedVisibility(visible = expanded) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(16.dp),
+                    modifier = Modifier
+                        .placeholder(dayWeatherToShow == null)
+                        .horizontalScroll(rememberScrollState()),
                 ) {
-                    AsyncImage(
-                        model = dayWeatherToShow?.hourlyWeather?.firstOrNull()?.iconUrl,
-                        contentDescription = "Weather icon",
-                        modifier = Modifier
-                            .placeholder(dayWeatherToShow == null)
-                            .size(24.dp),
-                    )
-                    HorizontalSpacer(width = 8.dp)
-                    Text(
-                        text = dayWeatherToShow?.day?: "Cumday",
-                        style = typography.titleSmall,
-                        modifier = Modifier
-                            .placeholder(dayWeatherToShow == null)
-                            .weight(1f),
-                    )
-                }
-                if(expanded){
-                    Row(
-                        modifier = Modifier.placeholder(dayWeatherToShow == null)
-                            .horizontalScroll(rememberScrollState())
-                    ){
-                        dayWeather?.hourlyWeather?.forEach{forecast ->
-                            Box(modifier = Modifier.padding(6.dp)){
-                                Column(
-                                    verticalArrangement = Arrangement.Center,
-                                    horizontalAlignment = Alignment.CenterHorizontally
-                                ) {
-                                    Text(text = "${forecast.temperature.celsius}°")
-                                    AsyncImage(
-                                        model = forecast.iconUrl,
-                                        contentDescription = "weather icon",
-                                        modifier = Modifier
-                                            .size(24.dp),
-                                    )
-                                    Text(text = forecast.time, fontSize = 14.sp)
-                                }
+                    dayWeather?.hourlyWeather?.forEach { forecast ->
+                        Box(modifier = Modifier.padding(6.dp)) {
+                            Column(
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(text = "${forecast.temperature.celsius}°")
+                                AsyncImage(
+                                    model = forecast.iconUrl,
+                                    contentDescription = "weather icon",
+                                    modifier = Modifier
+                                        .size(24.dp),
+                                )
+                                Text(text = forecast.time, fontSize = 14.sp)
                             }
                         }
                     }
                 }
             }
-
-
-
         }
     }
 }
@@ -121,20 +120,66 @@ fun DayWeatherCardPreview() {
         DayWeatherCard(
             dayWeather = DayWeather(
                 day = "Monday",
+                hourlyWeather = listOf(),
+            ),
+            expanded = false,
+            onClick = {},
+            modifier = Modifier.padding(16.dp),
+        )
+    }
+}
+
+@PreviewFontScale
+@PreviewLightDark
+@PreviewDynamicColors
+@Preview
+@Composable
+fun DayWeatherCardExpandedPreview() {
+    AppTheme {
+        DayWeatherCard(
+            dayWeather = DayWeather(
+                day = "Monday",
                 hourlyWeather = listOf(
                     HourWeather(
                         iconUrl = WeatherApi.getIconUrl("01d"),
                         type = "Clear",
                         temperature = 30.celsius,
                         feelsLike = 32.celsius,
-                        time = "7AM"
-                    )
+                        time = "7AM",
+                    ),
+                    HourWeather(
+                        iconUrl = WeatherApi.getIconUrl("01d"),
+                        type = "Clear",
+                        temperature = 30.celsius,
+                        feelsLike = 32.celsius,
+                        time = "7AM",
+                    ),
+                    HourWeather(
+                        iconUrl = WeatherApi.getIconUrl("01d"),
+                        type = "Clear",
+                        temperature = 30.celsius,
+                        feelsLike = 32.celsius,
+                        time = "7AM",
+                    ),
+                    HourWeather(
+                        iconUrl = WeatherApi.getIconUrl("01d"),
+                        type = "Clear",
+                        temperature = 30.celsius,
+                        feelsLike = 32.celsius,
+                        time = "7AM",
+                    ),
+                    HourWeather(
+                        iconUrl = WeatherApi.getIconUrl("01d"),
+                        type = "Clear",
+                        temperature = 30.celsius,
+                        feelsLike = 32.celsius,
+                        time = "7AM",
+                    ),
                 ),
-
             ),
+            expanded = true,
+            onClick = {},
             modifier = Modifier.padding(16.dp),
-            expanded = false,
-            onSelectedDayChange = {},
         )
     }
 }
@@ -148,9 +193,9 @@ fun DayWeatherCardNullPreview() {
     AppTheme {
         DayWeatherCard(
             dayWeather = null,
+            onClick = {},
+            expanded = false,
             modifier = Modifier.padding(16.dp),
-            onSelectedDayChange = {},
-            expanded = false
         )
     }
 }
