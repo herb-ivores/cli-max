@@ -18,7 +18,7 @@ fun Home() {
     val selectingLocation by viewModel.selectingLocation.collectAsStateWithLifecycle()
     val currentWeatherState by viewModel.state.collectAsStateWithLifecycle()
     val forecastWeatherState by viewModel.forecastState.collectAsStateWithLifecycle()
-    val daySelected by viewModel.selectedDay.collectAsStateWithLifecycle()
+    val selectedDay by viewModel.selectedDayWeather.collectAsStateWithLifecycle()
 
     HomeScreen(
         location = location,
@@ -28,7 +28,7 @@ fun Home() {
         onLocationSelect = viewModel::updateLocation,
         currentWeatherState = currentWeatherState,
         forecastWeatherState = forecastWeatherState,
-        selectedDay = viewModel::updateSelectedDay,
-        day = daySelected,
+        selectedDay = selectedDay,
+        onSelectedDayChange = viewModel::updateSelectedDay,
     )
 }

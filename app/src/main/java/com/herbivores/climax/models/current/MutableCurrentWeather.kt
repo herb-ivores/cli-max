@@ -2,13 +2,11 @@ package com.herbivores.climax.models.current
 
 import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.celsius
+import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-// TODO: Please complete these and revert their names.
-// Check all the fields from https://openweathermap.org/current and add them all here.
 data class MutableCurrentWeather(
     @SerializedName("coord")
     var coord: Coord? = Coord(),

@@ -18,13 +18,23 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.herbivores.climax.apiclient.ApiState
 import com.herbivores.climax.apiclient.ApiState.Loading
 import com.herbivores.climax.apiclient.ApiState.Success
+import com.herbivores.climax.constants.WeatherApi
+import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
+import com.herbivores.climax.models.domain.DayWeather
 import com.herbivores.climax.models.domain.ForecastWeather
+import com.herbivores.climax.models.domain.HourWeather
 import com.herbivores.climax.models.domain.Location
+import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.Elevation
 import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.components.extension.plus
@@ -34,15 +44,14 @@ fun HomeScreen(
     location: Location,
     locations: List<Location>,
     selectingLocation: Boolean,
-    day: String,
-    selectedDay: (String) -> Unit,
     onSelectingLocationChange: (Boolean) -> Unit,
     onLocationSelect: (Location) -> Unit,
     currentWeatherState: ApiState<CurrentWeather>,
     forecastWeatherState: ApiState<ForecastWeather>,
+    selectedDay: DayWeather?,
+    onSelectedDayChange: (DayWeather) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     val lazyListState = rememberLazyListState()
     val scrolled by remember {
         derivedStateOf {
@@ -90,90 +99,117 @@ fun HomeScreen(
                 items(items = forecastWeatherState.data.dailyWeather) { dayWeather ->
                     DayWeatherCard(
                         dayWeather = dayWeather,
-                        selectedDay = selectedDay,
-                        expanded = day == dayWeather.day,
+                        expanded = selectedDay == dayWeather,
+                        onClick = { onSelectedDayChange(dayWeather) },
                     )
                 }
             } else if (forecastWeatherState is Loading) {
                 items(5) {
                     DayWeatherCard(
                         dayWeather = null,
-                        selectedDay = selectedDay,
                         expanded = false,
+                        onClick = {},
                     )
                 }
             }
         }
     }
 }
-//
-//@PreviewScreenSizes
-//@PreviewFontScale
-//@PreviewLightDark
-//@PreviewDynamicColors
-//@Preview
-//@Composable
-//fun HomeScreenPreview() {
-//    AppTheme {
-//        HomeScreen(
-//            location = remember { Location.Samples.first() },
-//            locations = remember { Location.Samples - Location.Samples.first() },
-//            selectingLocation = false,
-//            onSelectingLocationChange = {},
-//            onLocationSelect = {},
-//            currentWeatherState = Success(
-//                CurrentWeather(
-//                    location = "Angeles",
-//                    iconUrl = WeatherApi.getIconUrl("01d"),
-//                    type = "Clear",
-//                    day = "Monday",
-//                    time = "12:00 PM",
-//                    temperature = 30.celsius,
-//                    feelsLike = 32.celsius,
-//                )
-//            ),
-//            forecastWeatherState = Success(
-//                ForecastWeather(
-//                    location = "Angeles",
-//                    forecast = listOf(
-//                        DayWeather(
-//                            day = "Wednesday",
-//                            iconUrl = WeatherApi.getIconUrl("01d"),
-//                            type = "Clear",
-//                            temperature = 30.celsius,
-//                            feelsLike = 32.celsius,
-//                        ),
-//                        DayWeather(
-//                            day = "Thursday",
-//                            iconUrl = WeatherApi.getIconUrl("01d"),
-//                            type = "Clear",
-//                            temperature = 30.celsius,
-//                            feelsLike = 32.celsius,
-//                        ),
-//                        DayWeather(
-//                            day = "Friday",
-//                            iconUrl = WeatherApi.getIconUrl("01d"),
-//                            type = "Clear",
-//                            temperature = 30.celsius,
-//                            feelsLike = 32.celsius,
-//                        ),
-//                        DayWeather(
-//                            day = "Saturday",
-//                            iconUrl = WeatherApi.getIconUrl("01d"),
-//                            type = "Clear",
-//                            temperature = 30.celsius,
-//                            feelsLike = 32.celsius,
-//                        ),
-//                        DayWeather(
-//                            day = "Sunday",
-//                            iconUrl = WeatherApi.getIconUrl("01d"),
-//                            type = "Clear",
-//                            temperature = 30.celsius,
-//                            feelsLike = 32.celsius,
-//                        ),
-//                    ),
-//                ),
-//            ),
-//        )
-//    }
-//}
+
+@PreviewScreenSizes
+@PreviewFontScale
+@PreviewLightDark
+@PreviewDynamicColors
+@Preview
+@Composable
+fun HomeScreenPreview() {
+    AppTheme {
+        HomeScreen(
+            location = remember { Location.Samples.first() },
+            locations = remember { Location.Samples - Location.Samples.first() },
+            selectingLocation = false,
+            onSelectingLocationChange = {},
+            onLocationSelect = {},
+            currentWeatherState = Success(
+                CurrentWeather(
+                    location = "Angeles",
+                    iconUrl = WeatherApi.getIconUrl("01d"),
+                    type = "Clear",
+                    day = "Monday",
+                    time = "12:00 PM",
+                    temperature = 30.celsius,
+                    feelsLike = 32.celsius,
+                )
+            ),
+            forecastWeatherState = Success(
+                ForecastWeather(
+                    location = "Angeles",
+                    dailyWeather = listOf(
+                        DayWeather(
+                            day = "Monday",
+                            hourlyWeather = listOf(
+                                HourWeather(
+                                    iconUrl = WeatherApi.getIconUrl("01d"),
+                                    type = "Clear",
+                                    temperature = 30.celsius,
+                                    feelsLike = 32.celsius,
+                                    time = "7AM"
+                                )
+                            ),
+                        ),
+                        DayWeather(
+                            day = "Monday",
+                            hourlyWeather = listOf(
+                                HourWeather(
+                                    iconUrl = WeatherApi.getIconUrl("01d"),
+                                    type = "Clear",
+                                    temperature = 30.celsius,
+                                    feelsLike = 32.celsius,
+                                    time = "7AM"
+                                )
+                            ),
+                        ),
+                        DayWeather(
+                            day = "Monday",
+                            hourlyWeather = listOf(
+                                HourWeather(
+                                    iconUrl = WeatherApi.getIconUrl("01d"),
+                                    type = "Clear",
+                                    temperature = 30.celsius,
+                                    feelsLike = 32.celsius,
+                                    time = "7AM"
+                                )
+                            ),
+                        ),
+                        DayWeather(
+                            day = "Monday",
+                            hourlyWeather = listOf(
+                                HourWeather(
+                                    iconUrl = WeatherApi.getIconUrl("01d"),
+                                    type = "Clear",
+                                    temperature = 30.celsius,
+                                    feelsLike = 32.celsius,
+                                    time = "7AM"
+                                )
+                            ),
+                        ),
+                        DayWeather(
+                            day = "Monday",
+                            hourlyWeather = listOf(
+                                HourWeather(
+                                    iconUrl = WeatherApi.getIconUrl("01d"),
+                                    type = "Clear",
+                                    temperature = 30.celsius,
+                                    feelsLike = 32.celsius,
+                                    time = "7AM"
+                                )
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            selectedDay = null,
+            onSelectedDayChange = {},
+        )
+    }
+}

@@ -2,8 +2,7 @@ package com.herbivores.climax.models.forecast
 
 import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.celsius
-import com.herbivores.climax.models.domain.DayWeather
+import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.HourWeather
 import java.text.SimpleDateFormat
 import java.util.Locale
