@@ -1,18 +1,9 @@
 package com.herbivores.climax.models.domain
 
-enum class Day(val friendlyName: String) {
-    Monday("Monday"),
-    Tuesday("Tuesday"),
-    Wednesday("Wednesday"),
-    Thursday("Thursday"),
-    Friday("Friday"),
-    Saturday("Saturday"),
-    Sunday("Sunday"),
-}
-
 data class DayWeather(
-    val day: String, // TODO: Change this to the enum Day
+    val day: String, // TODO: Remove this
     // TODO: Add these:
+//    val date: LocalDate, // Replace day with this (date). We'll just format the day in the UI.
 //    val maxTemperature: Temperature,
 //    val maxFeelsLike: Temperature,
 //    val wind: Wind,
