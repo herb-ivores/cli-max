@@ -28,7 +28,7 @@ fun Home() {
         onLocationSelect = viewModel::updateLocation,
         currentWeatherState = currentWeatherState,
         forecastWeatherState = forecastWeatherState,
-        selectedDay = viewModel::updateSelectedDay,
-        day = daySelected,
+        onSelectedDayChange = viewModel::updateOnSelectedDayChange,
+        selectedDay = daySelected,
     )
 }

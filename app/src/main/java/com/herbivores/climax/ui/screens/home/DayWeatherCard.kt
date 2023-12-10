@@ -42,7 +42,7 @@ fun DayWeatherCard(
     dayWeather: DayWeather?,
     modifier: Modifier = Modifier,
     expanded: Boolean,
-    selectedDay: (String)-> Unit,
+    onSelectedDayChange: (String)-> Unit,
 ) {
     var previousDayWeather by rememberMutableStateOf<DayWeather?>(null)
     LaunchedEffect(dayWeather) {
@@ -50,12 +50,12 @@ fun DayWeatherCard(
             previousDayWeather = dayWeather
         }
     }
-//    var expanded by remember { mutableStateOf (false) }
+
     val dayWeatherToShow = dayWeather ?: previousDayWeather
 
     Card(
         modifier = modifier.animateContentSize(),
-        onClick = {selectedDay(dayWeather!!.day)}
+        onClick = {onSelectedDayChange(dayWeather!!.day)}
     ) {
         Crossfade(targetState = expanded, label = "") { expanded ->
             Column {
@@ -134,7 +134,7 @@ fun DayWeatherCardPreview() {
             ),
             modifier = Modifier.padding(16.dp),
             expanded = false,
-            selectedDay = {},
+            onSelectedDayChange = {},
         )
     }
 }
@@ -149,7 +149,7 @@ fun DayWeatherCardNullPreview() {
         DayWeatherCard(
             dayWeather = null,
             modifier = Modifier.padding(16.dp),
-            selectedDay = {},
+            onSelectedDayChange = {},
             expanded = false
         )
     }

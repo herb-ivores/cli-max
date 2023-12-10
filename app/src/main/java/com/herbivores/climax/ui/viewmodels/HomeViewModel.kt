@@ -48,7 +48,7 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
         _selectingLocation.value = selectingLocation
     }
 
-    fun updateSelectedDay(day: String){
+    fun updateOnSelectedDayChange(day: String){
         _selectedDay.value = day
     }
     fun updateLocation(location: Location) {

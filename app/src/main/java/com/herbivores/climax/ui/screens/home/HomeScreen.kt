@@ -34,8 +34,8 @@ fun HomeScreen(
     location: Location,
     locations: List<Location>,
     selectingLocation: Boolean,
-    day: String,
-    selectedDay: (String) -> Unit,
+    selectedDay: String,
+    onSelectedDayChange: (String) -> Unit,
     onSelectingLocationChange: (Boolean) -> Unit,
     onLocationSelect: (Location) -> Unit,
     currentWeatherState: ApiState<CurrentWeather>,
@@ -90,15 +90,15 @@ fun HomeScreen(
                 items(items = forecastWeatherState.data.dailyWeather) { dayWeather ->
                     DayWeatherCard(
                         dayWeather = dayWeather,
-                        selectedDay = selectedDay,
-                        expanded = day == dayWeather.day,
+                        onSelectedDayChange = onSelectedDayChange,
+                        expanded = selectedDay == dayWeather.day,
                     )
                 }
             } else if (forecastWeatherState is Loading) {
                 items(5) {
                     DayWeatherCard(
                         dayWeather = null,
-                        selectedDay = selectedDay,
+                        onSelectedDayChange = onSelectedDayChange,
                         expanded = false,
                     )
                 }
