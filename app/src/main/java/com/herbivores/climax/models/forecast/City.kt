@@ -2,6 +2,7 @@ package com.herbivores.climax.models.forecast
 
 import com.google.gson.annotations.SerializedName
 
+
 data class City(
     @SerializedName("id")
     var id: Int? = null,
