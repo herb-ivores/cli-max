@@ -1,5 +1,6 @@
 package com.herbivores.climax.ui.screens.home
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
@@ -44,7 +44,6 @@ import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.Elevation
-import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.components.extension.plus
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -55,9 +54,11 @@ fun HomeScreen(
     location: Location,
     locations: List<Location>,
     selectingLocation: Boolean,
-    onSelectingLocationChange: (Boolean) -> Unit,
+    onToggleSelectingLocation: () -> Unit,
     onLocationSelect: (Location) -> Unit,
     currentWeatherState: ApiState<CurrentWeather>,
+    currentWeatherExpanded: Boolean,
+    onToggleCurrentWeatherExpanded: () -> Unit,
     forecastWeatherState: ApiState<ForecastWeather>,
     selectedDay: DayWeather?,
     onSelectedDayChange: (DayWeather) -> Unit,
@@ -79,9 +80,11 @@ fun HomeScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            Surface(tonalElevation = elevation) {
+            Surface(
+                tonalElevation = elevation,
+                onClick = onToggleCurrentWeatherExpanded,
+            ) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .windowInsetsPadding(WindowInsets.statusBars)
                         .animateContentSize(),
@@ -90,7 +93,7 @@ fun HomeScreen(
                         location = location,
                         locations = locations,
                         selectingLocation = selectingLocation,
-                        onSelectingLocationChange = onSelectingLocationChange,
+                        onClick = onToggleSelectingLocation,
                         onLocationSelect = onLocationSelect,
                         modifier = Modifier.padding(16.dp),
                     )
@@ -100,8 +103,14 @@ fun HomeScreen(
 
                         CurrentWeatherHeader(
                             currentWeather = currentWeather,
-                            modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 32.dp),
+                            modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 16.dp),
                         )
+                        AnimatedVisibility(visible = currentWeatherExpanded) {
+                            CurrentWeatherDetails(
+                                currentWeather = currentWeather,
+                                modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 16.dp),
+                            )
+                        }
                     }
                 }
             }
@@ -116,7 +125,7 @@ fun HomeScreen(
             )
         } else {
             LazyColumn(
-                contentPadding = contentPadding + PaddingValues(16.dp) - PaddingValues(top = 16.dp),
+                contentPadding = contentPadding + PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 state = lazyListState,
             ) {
@@ -154,7 +163,7 @@ fun HomeScreenPreview() {
             location = remember { Location.Samples.first() },
             locations = remember { Location.Samples - Location.Samples.first() },
             selectingLocation = false,
-            onSelectingLocationChange = {},
+            onToggleSelectingLocation = {},
             onLocationSelect = {},
             currentWeatherState = Success(
                 CurrentWeather(
@@ -176,6 +185,8 @@ fun HomeScreenPreview() {
                     sunset = LocalTime.now(),
                 ),
             ),
+            currentWeatherExpanded = false,
+            onToggleCurrentWeatherExpanded = {},
             forecastWeatherState = Success(
                 ForecastWeather(
                     location = "Angeles",

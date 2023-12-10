@@ -27,9 +27,11 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
     private val _selectingLocation = MutableStateFlow(false)
     val selectingLocation = _selectingLocation.asStateFlow()
 
-
     private val _state = MutableStateFlow<ApiState<CurrentWeather>>(ApiState.Loading())
     val state = _state.asStateFlow()
+
+    private val _currentWeatherExpanded = MutableStateFlow(false)
+    val currentWeatherExpanded = _currentWeatherExpanded.asStateFlow()
 
     private val _forecastState = MutableStateFlow<ApiState<ForecastWeather>>(ApiState.Loading())
     val forecastState = _forecastState.asStateFlow()
@@ -55,15 +57,26 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
         }
     }
 
-    fun updateSelectingLocation(selectingLocation: Boolean) {
-        _selectingLocation.value = selectingLocation
+    fun toggleSelectingLocation() {
+        _selectingLocation.update { oldSelectingLocation ->
+            !oldSelectingLocation
+        }
+        _currentWeatherExpanded.value = false
     }
 
-    fun updateSelectedDay(dayWeather: DayWeather){
+    fun toggleCurrentWeatherExpanded() {
+        _currentWeatherExpanded.update { oldCurrentWeatherExpanded ->
+            !oldCurrentWeatherExpanded
+        }
+        _selectingLocation.value = false
+    }
+
+    fun updateSelectedDay(dayWeather: DayWeather) {
         _selectedDayWeather.update { oldSelectedDayWeather ->
             if (oldSelectedDayWeather != dayWeather) dayWeather else null
         }
     }
+
     fun updateLocation(location: Location) {
         _location.value = location
         _selectingLocation.value = false
