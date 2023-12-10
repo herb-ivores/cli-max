@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -41,20 +42,18 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            location.collect { location ->
-                getCurrentWeather(location.latitude, location.longitude)
-                getForecastWeather(location.latitude, location.longitude)
+            location.collectLatest { (_, latitude, longitude) ->
+                getCurrentWeather(latitude, longitude)
+                getForecastWeather(latitude, longitude)
             }
         }
     }
 
     fun reload() {
-        viewModelScope.launch(Dispatchers.IO) {
-            location.collect { location ->
-                getCurrentWeather(location.latitude, location.longitude)
-                getForecastWeather(location.latitude, location.longitude)
-            }
-        }
+        val (_, latitude, longitude) = location.value
+        getCurrentWeather(latitude, longitude)
+        getForecastWeather(latitude, longitude)
+        _selectedDayWeather.value = null
     }
 
     fun toggleSelectingLocation() {
@@ -62,6 +61,7 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
             !oldSelectingLocation
         }
         _currentWeatherExpanded.value = false
+        _selectedDayWeather.value = null
     }
 
     fun toggleCurrentWeatherExpanded() {
@@ -69,12 +69,15 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
             !oldCurrentWeatherExpanded
         }
         _selectingLocation.value = false
+        _selectedDayWeather.value = null
     }
 
     fun updateSelectedDay(dayWeather: DayWeather) {
         _selectedDayWeather.update { oldSelectedDayWeather ->
             if (oldSelectedDayWeather != dayWeather) dayWeather else null
         }
+        _selectingLocation.value = false
+        _currentWeatherExpanded.value = false
     }
 
     fun updateLocation(location: Location) {
