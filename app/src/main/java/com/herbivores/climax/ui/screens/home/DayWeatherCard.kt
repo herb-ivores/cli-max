@@ -29,11 +29,17 @@ import coil.compose.AsyncImage
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.DayWeather
+import com.herbivores.climax.models.domain.Direction
 import com.herbivores.climax.models.domain.HourWeather
+import com.herbivores.climax.models.domain.Temperature
+import com.herbivores.climax.models.domain.Wind
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.HorizontalSpacer
 import com.thebrownfoxx.components.extension.rememberMutableStateOf
 import io.github.fornewid.placeholder.material3.placeholder
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +80,7 @@ fun DayWeatherCard(
                 )
                 HorizontalSpacer(width = 8.dp)
                 Text(
-                    text = dayWeatherToShow?.day ?: "Cumday",
+                    text = dayWeatherToShow?.date?.dayOfWeek?.name ?: "Cumday",
                     style = typography.titleSmall,
                     modifier = Modifier
                         .placeholder(dayWeatherToShow == null)
@@ -100,7 +106,7 @@ fun DayWeatherCard(
                                     modifier = Modifier
                                         .size(24.dp),
                                 )
-                                Text(text = forecast.time, fontSize = 14.sp)
+                                Text(text = forecast.time.format(DateTimeFormatter.ofPattern("h a")), fontSize = 14.sp)
                             }
                         }
                     }
@@ -119,8 +125,14 @@ fun DayWeatherCardPreview() {
     AppTheme {
         DayWeatherCard(
             dayWeather = DayWeather(
-                day = "Monday",
+                date = LocalDate.now(),
                 hourlyWeather = listOf(),
+                humidity = 25.0,
+                maxFeelsLike = Temperature(26.0),
+                maxTemperature = Temperature(27.0),
+                sunset = LocalTime.MIDNIGHT,
+                sunrise = LocalTime.MIDNIGHT,
+                wind = Wind(30.0,Direction.EAST)
             ),
             expanded = false,
             onClick = {},
@@ -138,42 +150,48 @@ fun DayWeatherCardExpandedPreview() {
     AppTheme {
         DayWeatherCard(
             dayWeather = DayWeather(
-                day = "Monday",
+                date = LocalDate.now(),
+                humidity = 25.0,
+                maxFeelsLike = Temperature(26.0),
+                maxTemperature = Temperature(27.0),
+                sunset = LocalTime.MIDNIGHT,
+                sunrise = LocalTime.MIDNIGHT,
+                wind = Wind(30.0,Direction.EAST),
                 hourlyWeather = listOf(
                     HourWeather(
                         iconUrl = WeatherApi.getIconUrl("01d"),
                         type = "Clear",
                         temperature = 30.celsius,
                         feelsLike = 32.celsius,
-                        time = "7AM",
+                        time = LocalTime.MIDNIGHT,
                     ),
                     HourWeather(
                         iconUrl = WeatherApi.getIconUrl("01d"),
                         type = "Clear",
                         temperature = 30.celsius,
                         feelsLike = 32.celsius,
-                        time = "7AM",
+                        time = LocalTime.MIDNIGHT,
                     ),
                     HourWeather(
                         iconUrl = WeatherApi.getIconUrl("01d"),
                         type = "Clear",
                         temperature = 30.celsius,
                         feelsLike = 32.celsius,
-                        time = "7AM",
+                        time = LocalTime.MIDNIGHT,
                     ),
                     HourWeather(
                         iconUrl = WeatherApi.getIconUrl("01d"),
                         type = "Clear",
                         temperature = 30.celsius,
                         feelsLike = 32.celsius,
-                        time = "7AM",
+                        time = LocalTime.MIDNIGHT,
                     ),
                     HourWeather(
                         iconUrl = WeatherApi.getIconUrl("01d"),
                         type = "Clear",
                         temperature = 30.celsius,
                         feelsLike = 32.celsius,
-                        time = "7AM",
+                        time = LocalTime.MIDNIGHT,
                     ),
                 ),
             ),

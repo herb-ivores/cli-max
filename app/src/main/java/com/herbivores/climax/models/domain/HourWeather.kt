@@ -1,7 +1,9 @@
 package com.herbivores.climax.models.domain
 
+import java.time.LocalTime
+
 data class HourWeather(
-    val time: String, // TODO: Change this to LocalTime
+    val time: LocalTime,
     val iconUrl: String,
     val type: String,
     val temperature: Temperature,

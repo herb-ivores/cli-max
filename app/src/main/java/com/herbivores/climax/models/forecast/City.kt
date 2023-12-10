@@ -1,6 +1,11 @@
 package com.herbivores.climax.models.forecast
 
 import com.google.gson.annotations.SerializedName
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneOffset
+
 
 data class City(
     @SerializedName("id")

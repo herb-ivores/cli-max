@@ -5,6 +5,9 @@ import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.HourWeather
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalTime
+import java.time.ZoneId
 import java.util.Locale
 
 data class List (
@@ -34,7 +37,9 @@ data class List (
         type = weather.firstOrNull()?.main.orEmpty(),
         temperature = (main?.temp ?: 0.0).celsius,
         feelsLike = (main?.feelsLike ?: 0.0).celsius,
-        time = SimpleDateFormat("hh a", Locale.ENGLISH).format((dt?: 0 )* 1000),
+        time = Instant.ofEpochSecond(dt?.toLong()?:0)
+            .atZone(ZoneId.systemDefault())
+            .toLocalTime(),
     )
 
 }

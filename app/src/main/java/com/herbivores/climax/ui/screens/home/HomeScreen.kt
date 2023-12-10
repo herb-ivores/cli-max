@@ -35,12 +35,14 @@ import com.herbivores.climax.models.domain.Direction
 import com.herbivores.climax.models.domain.ForecastWeather
 import com.herbivores.climax.models.domain.HourWeather
 import com.herbivores.climax.models.domain.Location
+import com.herbivores.climax.models.domain.Temperature
 import com.herbivores.climax.models.domain.Wind
 import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.Elevation
 import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.components.extension.plus
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -160,62 +162,92 @@ fun HomeScreenPreview() {
                     location = "Angeles",
                     dailyWeather = listOf(
                         DayWeather(
-                            day = "Monday",
+                            date = LocalDate.now(),
+                            humidity = 25.0,
+                            maxFeelsLike = Temperature(26.0),
+                            maxTemperature = Temperature(27.0),
+                            sunset = LocalTime.MIDNIGHT,
+                            sunrise = LocalTime.MIDNIGHT,
+                            wind = Wind(30.0,Direction.EAST),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
                                     type = "Clear",
                                     temperature = 30.celsius,
                                     feelsLike = 32.celsius,
-                                    time = "7AM"
+                                    time = LocalTime.MIDNIGHT,
                                 )
                             ),
                         ),
                         DayWeather(
-                            day = "Monday",
+                            date = LocalDate.now(),
+                            humidity = 25.0,
+                            maxFeelsLike = Temperature(26.0),
+                            maxTemperature = Temperature(27.0),
+                            sunset = LocalTime.MIDNIGHT,
+                            sunrise = LocalTime.MIDNIGHT,
+                            wind = Wind(30.0,Direction.EAST),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
                                     type = "Clear",
                                     temperature = 30.celsius,
                                     feelsLike = 32.celsius,
-                                    time = "7AM"
+                                    time = LocalTime.MIDNIGHT,
                                 )
                             ),
                         ),
                         DayWeather(
-                            day = "Monday",
+                            date = LocalDate.now(),
+                            humidity = 25.0,
+                            maxFeelsLike = Temperature(26.0),
+                            maxTemperature = Temperature(27.0),
+                            sunset = LocalTime.MIDNIGHT,
+                            sunrise = LocalTime.MIDNIGHT,
+                            wind = Wind(30.0,Direction.EAST),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
                                     type = "Clear",
                                     temperature = 30.celsius,
                                     feelsLike = 32.celsius,
-                                    time = "7AM"
+                                    time = LocalTime.MIDNIGHT,
                                 )
                             ),
                         ),
                         DayWeather(
-                            day = "Monday",
+                            date = LocalDate.now(),
+                            humidity = 25.0,
+                            maxFeelsLike = Temperature(26.0),
+                            maxTemperature = Temperature(27.0),
+                            sunset = LocalTime.MIDNIGHT,
+                            sunrise = LocalTime.MIDNIGHT,
+                            wind = Wind(30.0,Direction.EAST),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
                                     type = "Clear",
                                     temperature = 30.celsius,
                                     feelsLike = 32.celsius,
-                                    time = "7AM"
+                                    time = LocalTime.MIDNIGHT,
                                 )
                             ),
                         ),
                         DayWeather(
-                            day = "Monday",
+                            date = LocalDate.now(),
+                            humidity = 25.0,
+                            maxFeelsLike = Temperature(26.0),
+                            maxTemperature = Temperature(27.0),
+                            sunset = LocalTime.MIDNIGHT,
+                            sunrise = LocalTime.MIDNIGHT,
+                            wind = Wind(30.0,Direction.EAST),
                             hourlyWeather = listOf(
                                 HourWeather(
                                     iconUrl = WeatherApi.getIconUrl("01d"),
                                     type = "Clear",
                                     temperature = 30.celsius,
                                     feelsLike = 32.celsius,
-                                    time = "7AM"
+                                    time = LocalTime.MIDNIGHT,
                                 )
                             ),
                         ),
