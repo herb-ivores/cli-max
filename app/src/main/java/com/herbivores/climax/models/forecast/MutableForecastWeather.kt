@@ -4,12 +4,8 @@ import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.models.domain.DayWeather
 import com.herbivores.climax.models.domain.ForecastWeather
 import com.herbivores.climax.models.domain.Temperature
-import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.ZoneId
-import java.util.Locale
 
 data class MutableForecastWeather(
     @SerializedName("cod")

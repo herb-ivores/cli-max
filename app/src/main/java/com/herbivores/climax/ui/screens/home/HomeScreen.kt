@@ -28,7 +28,6 @@ import com.herbivores.climax.apiclient.ApiState
 import com.herbivores.climax.apiclient.ApiState.Loading
 import com.herbivores.climax.apiclient.ApiState.Success
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.models.domain.DayWeather
 import com.herbivores.climax.models.domain.Direction
@@ -37,6 +36,7 @@ import com.herbivores.climax.models.domain.HourWeather
 import com.herbivores.climax.models.domain.Location
 import com.herbivores.climax.models.domain.Temperature
 import com.herbivores.climax.models.domain.Wind
+import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.Elevation

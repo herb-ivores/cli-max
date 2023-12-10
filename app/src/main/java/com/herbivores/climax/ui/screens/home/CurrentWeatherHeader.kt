@@ -18,10 +18,10 @@ import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.models.domain.Direction
 import com.herbivores.climax.models.domain.Wind
+import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.rememberMutableStateOf

@@ -2,13 +2,10 @@ package com.herbivores.climax.models.forecast
 
 import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.HourWeather
-import java.text.SimpleDateFormat
+import com.herbivores.climax.models.domain.celsius
 import java.time.Instant
-import java.time.LocalTime
 import java.time.ZoneId
-import java.util.Locale
 
 data class List (
     @SerializedName("dt")

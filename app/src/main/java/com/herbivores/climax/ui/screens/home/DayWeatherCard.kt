@@ -27,12 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.DayWeather
 import com.herbivores.climax.models.domain.Direction
 import com.herbivores.climax.models.domain.HourWeather
 import com.herbivores.climax.models.domain.Temperature
 import com.herbivores.climax.models.domain.Wind
+import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.HorizontalSpacer
 import com.thebrownfoxx.components.extension.rememberMutableStateOf
