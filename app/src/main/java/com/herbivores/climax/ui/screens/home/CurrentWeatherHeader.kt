@@ -20,9 +20,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
+import com.herbivores.climax.models.domain.Direction
+import com.herbivores.climax.models.domain.Wind
+import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.rememberMutableStateOf
 import io.github.fornewid.placeholder.material3.placeholder
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Composable
 fun CurrentWeatherHeader(
@@ -79,10 +84,19 @@ fun CurrentWeatherHeaderPreview() {
                     location = "Angeles",
                     iconUrl = "01d",
                     type = "Clear",
-                    day = "Monday",
-                    time = "12:00 PM",
+                    dateTime = LocalDateTime.now(),
                     temperature = 30.celsius,
                     feelsLike = 32.celsius,
+                    wind = Wind(
+                        speedMetersPerSecond = 69.0,
+                        direction = Direction(degrees = 69),
+                    ),
+                    humidityPercent = 69,
+                    pressureMillibars = 420,
+                    visibility = 69.meters,
+                    precipitationMillimeters = 69.69,
+                    sunrise = LocalTime.now(),
+                    sunset = LocalTime.now(),
                 ),
                 modifier = Modifier.padding(32.dp)
             )

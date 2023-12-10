@@ -11,7 +11,13 @@ enum class Direction(val symbol: String) {
     NORTH_WEST("NW"),
 }
 
+fun Direction(degrees: Int): Direction {
+    val directions = Direction.entries
+    val index = degrees / 45 % directions.size
+    return directions[index]
+}
+
 data class Wind(
-    val speed: Double,
+    val speedMetersPerSecond: Double,
     val direction: Direction,
 )

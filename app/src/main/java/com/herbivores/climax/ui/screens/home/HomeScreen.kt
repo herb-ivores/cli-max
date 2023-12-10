@@ -31,13 +31,18 @@ import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.models.domain.DayWeather
+import com.herbivores.climax.models.domain.Direction
 import com.herbivores.climax.models.domain.ForecastWeather
 import com.herbivores.climax.models.domain.HourWeather
 import com.herbivores.climax.models.domain.Location
+import com.herbivores.climax.models.domain.Wind
+import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.Elevation
 import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.components.extension.plus
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Composable
 fun HomeScreen(
@@ -133,13 +138,22 @@ fun HomeScreenPreview() {
             currentWeatherState = Success(
                 CurrentWeather(
                     location = "Angeles",
-                    iconUrl = WeatherApi.getIconUrl("01d"),
+                    iconUrl = "01d",
                     type = "Clear",
-                    day = "Monday",
-                    time = "12:00 PM",
+                    dateTime = LocalDateTime.now(),
                     temperature = 30.celsius,
                     feelsLike = 32.celsius,
-                )
+                    wind = Wind(
+                        speedMetersPerSecond = 69.0,
+                        direction = Direction(degrees = 69),
+                    ),
+                    humidityPercent = 69,
+                    pressureMillibars = 420,
+                    visibility = 69.meters,
+                    precipitationMillimeters = 69.69,
+                    sunrise = LocalTime.now(),
+                    sunset = LocalTime.now(),
+                ),
             ),
             forecastWeatherState = Success(
                 ForecastWeather(

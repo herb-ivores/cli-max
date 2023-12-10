@@ -2,10 +2,12 @@ package com.herbivores.climax.models.current
 
 import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.herbivores.climax.models.domain.Direction
+import com.herbivores.climax.models.domain.celsius
+import com.herbivores.climax.models.domain.meters
+import java.time.Instant
+import java.time.ZoneId
 
 data class MutableCurrentWeather(
     @SerializedName("coord")
@@ -34,14 +36,31 @@ data class MutableCurrentWeather(
     var name: String? = null,
     @SerializedName("cod")
     var cod: Int? = null,
+    @SerializedName("precipitation.value")
+    var precipitationValue: Double? = null,
 ) {
     fun toCurrentWeather() = CurrentWeather(
         location = name ?: "",
+        dateTime = Instant.ofEpochSecond(dt ?: 0)
+            .atZone(ZoneId.systemDefault())
+            .toLocalDateTime(),
         iconUrl = WeatherApi.getIconUrl(weather.firstOrNull()?.icon ?: ""),
         type = weather.firstOrNull()?.main ?: "",
-        day = SimpleDateFormat("hh:mm aa", Locale.ENGLISH).format((dt ?: 0) * 1000),
-        time = SimpleDateFormat("EEEE", Locale.ENGLISH).format((dt ?: 0) * 1000),
         temperature = (main?.temp ?: 0.0).celsius,
         feelsLike = (main?.feelsLike ?: 0.0).celsius,
+        wind = com.herbivores.climax.models.domain.Wind(
+            speedMetersPerSecond = wind?.speed ?: 0.0,
+            direction = Direction(degrees = wind?.deg ?: 0),
+        ),
+        humidityPercent = main?.humidity ?: 0,
+        pressureMillibars = main?.pressure ?: 0,
+        visibility = (visibility ?: 0).meters,
+        precipitationMillimeters = precipitationValue ?: 0.0,
+        sunrise = Instant.ofEpochSecond(sys?.sunrise ?: 0)
+            .atZone(ZoneId.systemDefault())
+            .toLocalTime(),
+        sunset = Instant.ofEpochSecond(sys?.sunset ?: 0)
+            .atZone(ZoneId.systemDefault())
+            .toLocalTime(),
     )
 }

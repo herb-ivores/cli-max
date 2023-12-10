@@ -10,7 +10,7 @@ data class Sys(
     @SerializedName("country")
     var country: String? = null,
     @SerializedName("sunrise")
-    var sunrise: Int? = null,
+    var sunrise: Long? = null,
     @SerializedName("sunset")
-    var sunset: Int? = null,
+    var sunset: Long? = null,
 )
