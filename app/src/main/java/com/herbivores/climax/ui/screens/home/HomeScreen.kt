@@ -1,10 +1,12 @@
 package com.herbivores.climax.ui.screens.home
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -17,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
@@ -25,10 +28,10 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import com.herbivores.climax.apiclient.ApiState
+import com.herbivores.climax.apiclient.ApiState.Failure
 import com.herbivores.climax.apiclient.ApiState.Loading
 import com.herbivores.climax.apiclient.ApiState.Success
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.CurrentWeather
 import com.herbivores.climax.models.domain.DayWeather
 import com.herbivores.climax.models.domain.Direction
@@ -36,6 +39,7 @@ import com.herbivores.climax.models.domain.ForecastWeather
 import com.herbivores.climax.models.domain.HourWeather
 import com.herbivores.climax.models.domain.Location
 import com.herbivores.climax.models.domain.Wind
+import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.extension.Elevation
@@ -55,6 +59,7 @@ fun HomeScreen(
     forecastWeatherState: ApiState<ForecastWeather>,
     selectedDay: DayWeather?,
     onSelectedDayChange: (DayWeather) -> Unit,
+    onReload: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
@@ -73,7 +78,12 @@ fun HomeScreen(
         modifier = modifier,
         topBar = {
             Surface(tonalElevation = elevation) {
-                Column(modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars)) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .windowInsetsPadding(WindowInsets.statusBars)
+                        .animateContentSize(),
+                ) {
                     LocationPicker(
                         location = location,
                         locations = locations,
@@ -95,26 +105,35 @@ fun HomeScreen(
             }
         }
     ) { contentPadding ->
-        LazyColumn(
-            contentPadding = contentPadding + PaddingValues(16.dp) - PaddingValues(top = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            state = lazyListState,
-        ) {
-            if (forecastWeatherState is Success) {
-                items(items = forecastWeatherState.data.dailyWeather) { dayWeather ->
-                    DayWeatherCard(
-                        dayWeather = dayWeather,
-                        expanded = selectedDay == dayWeather,
-                        onClick = { onSelectedDayChange(dayWeather) },
-                    )
-                }
-            } else if (forecastWeatherState is Loading) {
-                items(5) {
-                    DayWeatherCard(
-                        dayWeather = null,
-                        expanded = false,
-                        onClick = {},
-                    )
+        if (currentWeatherState is Failure || forecastWeatherState is Failure) {
+            ErrorLoading(
+                onReload = onReload,
+                modifier = Modifier
+                    .padding(contentPadding + PaddingValues(32.dp))
+                    .fillMaxSize(),
+            )
+        } else {
+            LazyColumn(
+                contentPadding = contentPadding + PaddingValues(16.dp) - PaddingValues(top = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                state = lazyListState,
+            ) {
+                if (forecastWeatherState is Success) {
+                    items(items = forecastWeatherState.data.dailyWeather) { dayWeather ->
+                        DayWeatherCard(
+                            dayWeather = dayWeather,
+                            expanded = selectedDay == dayWeather,
+                            onClick = { onSelectedDayChange(dayWeather) },
+                        )
+                    }
+                } else if (forecastWeatherState is Loading) {
+                    items(5) {
+                        DayWeatherCard(
+                            dayWeather = null,
+                            expanded = false,
+                            onClick = {},
+                        )
+                    }
                 }
             }
         }
@@ -224,6 +243,7 @@ fun HomeScreenPreview() {
             ),
             selectedDay = null,
             onSelectedDayChange = {},
+            onReload = {},
         )
     }
 }

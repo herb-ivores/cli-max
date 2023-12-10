@@ -46,6 +46,15 @@ class HomeViewModel(private val weatherRepository: WeatherRepository) : ViewMode
         }
     }
 
+    fun reload() {
+        viewModelScope.launch(Dispatchers.IO) {
+            location.collect { location ->
+                getCurrentWeather(location.latitude, location.longitude)
+                getForecastWeather(location.latitude, location.longitude)
+            }
+        }
+    }
+
     fun updateSelectingLocation(selectingLocation: Boolean) {
         _selectingLocation.value = selectingLocation
     }

@@ -30,5 +30,6 @@ fun Home() {
         forecastWeatherState = forecastWeatherState,
         selectedDay = selectedDay,
         onSelectedDayChange = viewModel::updateSelectedDay,
+        onReload = viewModel::reload,
     )
 }
