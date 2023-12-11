@@ -2,6 +2,7 @@ package com.herbivores.climax.ui.screens.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Air
 import androidx.compose.material3.Icon
@@ -24,6 +25,7 @@ fun Info(
     title: String,
     value: String,
     modifier: Modifier = Modifier,
+    small: Boolean = false,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -35,11 +37,12 @@ fun Info(
             Text(
                 text = title.uppercase(),
                 maxLines = 1,
-                style = typography.labelLarge,
+                style = if (small) typography.labelSmall else typography.labelMedium,
             )
             Text(
                 text = value,
                 maxLines = 1,
+                style = if (small) typography.bodySmall else typography.bodyMedium,
             )
         }
     }
@@ -55,6 +58,23 @@ fun InfoPreview() {
             iconContentDescription = "Wind icon",
             title = "Wind speed",
             value = "69 m/s",
+            modifier = Modifier.padding(16.dp),
+        )
+    }
+}
+
+@PreviewFontScale
+@Preview
+@Composable
+fun InfoSmallPreview() {
+    AppTheme {
+        Info(
+            icon = Icons.TwoTone.Air,
+            iconContentDescription = "Wind icon",
+            title = "Wind speed",
+            value = "69 m/s",
+            small = true,
+            modifier = Modifier.padding(16.dp),
         )
     }
 }

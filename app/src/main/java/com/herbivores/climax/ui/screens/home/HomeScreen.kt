@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.KeyboardArrowDown
 import androidx.compose.material.icons.twotone.KeyboardArrowUp
@@ -90,6 +92,7 @@ fun HomeScreen(
             Surface(tonalElevation = elevation) {
                 Column(
                     modifier = Modifier
+                        .verticalScroll(rememberScrollState())
                         .windowInsetsPadding(WindowInsets.statusBars)
                         .animateContentSize(),
                 ) {
@@ -220,7 +223,7 @@ fun HomeScreenPreview() {
                     dailyWeather = listOf(
                         DayWeather(
                             date = LocalDate.now(),
-                            humidity = 25.0,
+                            humidity = 25,
                             maxFeelsLike = Temperature(26.0),
                             maxTemperature = Temperature(27.0),
                             sunset = LocalTime.MIDNIGHT,
@@ -239,7 +242,7 @@ fun HomeScreenPreview() {
                         ),
                         DayWeather(
                             date = LocalDate.now(),
-                            humidity = 25.0,
+                            humidity = 25,
                             maxFeelsLike = Temperature(26.0),
                             maxTemperature = Temperature(27.0),
                             sunset = LocalTime.MIDNIGHT,
@@ -258,7 +261,7 @@ fun HomeScreenPreview() {
                         ),
                         DayWeather(
                             date = LocalDate.now(),
-                            humidity = 25.0,
+                            humidity = 25,
                             maxFeelsLike = Temperature(26.0),
                             maxTemperature = Temperature(27.0),
                             sunset = LocalTime.MIDNIGHT,
@@ -277,7 +280,7 @@ fun HomeScreenPreview() {
                         ),
                         DayWeather(
                             date = LocalDate.now(),
-                            humidity = 25.0,
+                            humidity = 25,
                             maxFeelsLike = Temperature(26.0),
                             maxTemperature = Temperature(27.0),
                             sunset = LocalTime.MIDNIGHT,
@@ -296,7 +299,7 @@ fun HomeScreenPreview() {
                         ),
                         DayWeather(
                             date = LocalDate.now(),
-                            humidity = 25.0,
+                            humidity = 25,
                             maxFeelsLike = Temperature(26.0),
                             maxTemperature = Temperature(27.0),
                             sunset = LocalTime.MIDNIGHT,

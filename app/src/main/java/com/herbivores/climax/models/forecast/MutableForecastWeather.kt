@@ -7,6 +7,7 @@ import com.herbivores.climax.models.domain.ForecastWeather
 import com.herbivores.climax.models.domain.Temperature
 import java.time.Instant
 import java.time.ZoneId
+import kotlin.math.roundToInt
 
 data class MutableForecastWeather(
     @SerializedName("cod")
@@ -28,9 +29,9 @@ data class MutableForecastWeather(
         }.map { (day, hourWeatherList) ->
             DayWeather(
                 date = day,
-                humidity = hourWeatherList.map { it.main?.humidity?.toDouble() ?: 0.0 }.average(),
-                maxTemperature = Temperature(hourWeatherList.map { it.main?.tempMax?: 0.0}.maxOrNull()?:0.0),
-                maxFeelsLike = Temperature(hourWeatherList.map { it.main?.feelsLike ?:0.0 }.maxOrNull() ?: 0.0),
+                humidity = hourWeatherList.map { it.main?.humidity ?: 0 }.average().roundToInt(),
+                maxTemperature = Temperature(hourWeatherList.maxOfOrNull { it.main?.tempMax ?: 0.0 } ?:0.0),
+                maxFeelsLike = Temperature(hourWeatherList.maxOfOrNull { it.main?.feelsLike ?: 0.0 } ?: 0.0),
                 wind = hourWeatherList.map { it.wind?.toWind() }.maxByOrNull { it?.speedMetersPerSecond ?: 0.0 }?:Wind().toWind(),
                 sunrise = Instant.ofEpochSecond(City().sunrise?.toLong()?:0)
                     .atZone(ZoneId.systemDefault())

@@ -37,9 +37,9 @@ fun CurrentWeatherDetails(
     val windSpeed = "${currentWeather?.wind?.speedMetersPerSecond ?: 69} m/s " +
             (currentWeather?.wind?.direction?.symbol ?: "E")
     val sunrise = currentWeather?.sunrise
-        ?.format(DateTimeFormatter.ofPattern("h:m a")) ?: "6:09 am"
+        ?.format(DateTimeFormatter.ofPattern("h:mm a")) ?: "6:09 am"
     val sunset = currentWeather?.sunset
-        ?.format(DateTimeFormatter.ofPattern("h:m a")) ?: "6:09 pm"
+        ?.format(DateTimeFormatter.ofPattern("h:mm a")) ?: "6:09 pm"
 
     Column(
         verticalArrangement = Arrangement.spacedBy(16.dp),

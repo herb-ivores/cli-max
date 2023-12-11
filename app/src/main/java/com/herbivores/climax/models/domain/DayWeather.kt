@@ -9,7 +9,7 @@ data class DayWeather(
     val maxTemperature: Temperature,
     val maxFeelsLike: Temperature,
     val wind: Wind,
-    val humidity: Double,
+    val humidity: Int,
     val sunrise: LocalTime,
     val sunset: LocalTime,
     val hourlyWeather: List<HourWeather>,

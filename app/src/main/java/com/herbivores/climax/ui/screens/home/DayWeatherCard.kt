@@ -10,6 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Air
+import androidx.compose.material.icons.twotone.Thermostat
+import androidx.compose.material.icons.twotone.WaterDrop
+import androidx.compose.material.icons.twotone.WbSunny
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme.typography
@@ -64,6 +69,13 @@ fun DayWeatherCard(
         ?.replaceFirstChar { it.uppercase() }
         ?: "Cumday"
 
+    val windSpeed = "${dayWeatherToShow?.wind?.speedMetersPerSecond ?: 69} m/s " +
+            (dayWeatherToShow?.wind?.direction?.symbol ?: "E")
+    val sunrise = dayWeatherToShow?.sunrise
+        ?.format(DateTimeFormatter.ofPattern("h:mm a")) ?: "6:09 am"
+    val sunset = dayWeatherToShow?.sunset
+        ?.format(DateTimeFormatter.ofPattern("h:mm a")) ?: "6:09 pm"
+
     Card(
         modifier = modifier,
         onClick = { onClick() },
@@ -88,30 +100,77 @@ fun DayWeatherCard(
                         .placeholder(dayWeatherToShow == null)
                         .weight(1f),
                 )
+                HorizontalSpacer(width = 16.dp)
+                Text(
+                    text = "${dayWeatherToShow?.maxTemperature?.celsius}°",
+                    style = typography.titleSmall,
+                    modifier = Modifier.placeholder(dayWeatherToShow == null),
+                )
             }
             AnimatedVisibility(visible = expanded) {
-                LazyRow(
-                    contentPadding = PaddingValues(16.dp) - PaddingValues(top = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .placeholder(dayWeatherToShow == null),
-                ) {
-                    items(dayWeather?.hourlyWeather ?: emptyList()) { hourWeather ->
-                        val time = hourWeather.time
-                            .format(DateTimeFormatter.ofPattern("h a"))
+                Column {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier
+                            .padding(
+                                PaddingValues(16.dp) - PaddingValues(top = 16.dp)
+                            ),
+                    ) {
+                        Info(
+                            icon = Icons.TwoTone.Thermostat,
+                            iconContentDescription = "Temperature icon",
+                            title = "Feels like",
+                            value = "${dayWeatherToShow?.maxFeelsLike?.celsius}°",
+                            small = true,
+                        )
+                        Info(
+                            icon = Icons.TwoTone.Air,
+                            iconContentDescription = "Wind icon",
+                            title = "Wind speed",
+                            value = windSpeed,
+                            small = true,
+                        )
+                        Info(
+                            icon = Icons.TwoTone.WaterDrop,
+                            iconContentDescription = "Humidity icon",
+                            title = "Humidity",
+                            value = "${dayWeatherToShow?.humidity ?: 69}%",
+                            small = true,
+                        )
+                        Info(
+                            icon = Icons.TwoTone.WbSunny,
+                            iconContentDescription = "Sun icon",
+                            title = "Sunrise, sunset",
+                            value = "$sunrise, $sunset",
+                            small = true,
+                        )
+                    }
+                    LazyRow(
+                        contentPadding = PaddingValues(16.dp) - PaddingValues(top = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .placeholder(dayWeatherToShow == null),
+                    ) {
+                        items(dayWeather?.hourlyWeather ?: emptyList()) { hourWeather ->
+                            val time = hourWeather.time
+                                .format(DateTimeFormatter.ofPattern("h a"))
 
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Text(text = "${hourWeather.temperature.celsius}°")
-                            AsyncImage(
-                                model = hourWeather.iconUrl,
-                                contentDescription = "Weather icon",
-                                modifier = Modifier.size(24.dp),
-                            )
-                            Text(text = time, style = typography.labelSmall)
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                            ) {
+                                Text(
+                                    text = "${hourWeather.temperature.celsius}°",
+                                    style = typography.labelMedium,
+                                )
+                                AsyncImage(
+                                    model = hourWeather.iconUrl,
+                                    contentDescription = "Weather icon",
+                                    modifier = Modifier.size(24.dp),
+                                )
+                                Text(text = time, style = typography.labelSmall)
+                            }
                         }
                     }
                 }
@@ -131,7 +190,7 @@ fun DayWeatherCardPreview() {
             dayWeather = DayWeather(
                 date = LocalDate.now(),
                 hourlyWeather = listOf(),
-                humidity = 25.0,
+                humidity = 25,
                 maxFeelsLike = Temperature(26.0),
                 maxTemperature = Temperature(27.0),
                 sunset = LocalTime.MIDNIGHT,
@@ -139,7 +198,7 @@ fun DayWeatherCardPreview() {
                 wind = Wind(30.0, Direction.EAST),
                 iconUrl = WeatherApi.getIconUrl("01d"),
             ),
-            expanded = true,
+            expanded = false,
             onClick = {},
             modifier = Modifier.padding(16.dp),
         )
@@ -156,7 +215,7 @@ fun DayWeatherCardExpandedPreview() {
         DayWeatherCard(
             dayWeather = DayWeather(
                 date = LocalDate.now(),
-                humidity = 25.0,
+                humidity = 25,
                 maxFeelsLike = Temperature(26.0),
                 maxTemperature = Temperature(27.0),
                 sunset = LocalTime.MIDNIGHT,
