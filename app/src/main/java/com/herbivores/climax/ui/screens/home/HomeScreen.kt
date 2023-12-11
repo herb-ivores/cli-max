@@ -8,12 +8,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.KeyboardArrowDown
+import androidx.compose.material.icons.twotone.KeyboardArrowUp
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -43,7 +47,10 @@ import com.herbivores.climax.models.domain.Wind
 import com.herbivores.climax.models.domain.celsius
 import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
+import com.thebrownfoxx.components.FilledTonalButton
+import com.thebrownfoxx.components.VerticalSpacer
 import com.thebrownfoxx.components.extension.Elevation
+import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.components.extension.plus
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -80,10 +87,7 @@ fun HomeScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            Surface(
-                tonalElevation = elevation,
-                onClick = onToggleCurrentWeatherExpanded,
-            ) {
+            Surface(tonalElevation = elevation) {
                 Column(
                     modifier = Modifier
                         .windowInsetsPadding(WindowInsets.statusBars)
@@ -100,15 +104,38 @@ fun HomeScreen(
                     if (currentWeatherState is Success || currentWeatherState is Loading) {
                         val currentWeather =
                             if (currentWeatherState is Success) currentWeatherState.data else null
+                        val expanderIcon =
+                            if (!currentWeatherExpanded) Icons.TwoTone.KeyboardArrowDown
+                            else Icons.TwoTone.KeyboardArrowUp
+                        val expanderText =
+                            if (!currentWeatherExpanded) "Show more"
+                            else "Show less"
 
-                        CurrentWeatherHeader(
-                            currentWeather = currentWeather,
-                            modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 16.dp),
-                        )
-                        AnimatedVisibility(visible = currentWeatherExpanded) {
-                            CurrentWeatherDetails(
-                                currentWeather = currentWeather,
-                                modifier = Modifier.padding(start = 32.dp, end = 32.dp, bottom = 16.dp),
+                        Column(
+                            modifier = Modifier.padding(
+                                start = 16.dp,
+                                end = 16.dp,
+                                bottom = 8.dp,
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                            ) {
+                                CurrentWeatherHeader(currentWeather = currentWeather)
+                                VerticalSpacer(height = 16.dp)
+                                AnimatedVisibility(visible = currentWeatherExpanded) {
+                                    CurrentWeatherDetails(
+                                        currentWeather = currentWeather,
+                                        modifier = Modifier.padding(bottom = 16.dp),
+                                    )
+                                }
+                            }
+                            FilledTonalButton(
+                                icon = expanderIcon,
+                                iconContentDescription = "$expanderText icon",
+                                text = expanderText,
+                                onClick = onToggleCurrentWeatherExpanded,
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
                     }
@@ -125,7 +152,7 @@ fun HomeScreen(
             )
         } else {
             LazyColumn(
-                contentPadding = contentPadding + PaddingValues(16.dp),
+                contentPadding = contentPadding + PaddingValues(16.dp) - PaddingValues(top = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 state = lazyListState,
             ) {
