@@ -28,10 +28,10 @@ data class MutableForecastWeather(
         }.map { (day, hourWeatherList) ->
             DayWeather(
                 date = day,
-                humidity = hourWeatherList.map { it.main?.humidity?.toDouble() ?: 0.0 }.maxOrNull() ?: 0.0,
+                humidity = hourWeatherList.map { it.main?.humidity?.toDouble() ?: 0.0 }.average(),
                 maxTemperature = Temperature(hourWeatherList.map { it.main?.tempMax?: 0.0}.maxOrNull()?:0.0),
                 maxFeelsLike = Temperature(hourWeatherList.map { it.main?.feelsLike ?:0.0 }.maxOrNull() ?: 0.0),
-                wind = Wind().toWind(),
+                wind = hourWeatherList.map { it.wind?.toWind() }.maxByOrNull { it?.speedMetersPerSecond ?: 0.0 }?:Wind().toWind(),
                 sunrise = Instant.ofEpochSecond(City().sunrise?.toLong()?:0)
                     .atZone(ZoneId.systemDefault())
                     .toLocalTime(),
