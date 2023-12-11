@@ -1,5 +1,6 @@
 package com.herbivores.climax.models.forecast
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.domain.DayWeather
@@ -9,6 +10,7 @@ import java.time.Instant
 import java.time.ZoneId
 import kotlin.math.roundToInt
 
+@Keep
 data class MutableForecastWeather(
     @SerializedName("cod")
     var cod : String? = null,

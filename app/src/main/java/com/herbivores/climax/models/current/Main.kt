@@ -1,7 +1,9 @@
 package com.herbivores.climax.models.current
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
+@Keep
 data class Main(
     @SerializedName("temp")
     var temp: Double? = null,

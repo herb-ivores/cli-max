@@ -1,5 +1,6 @@
 package com.herbivores.climax.models.forecast
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.domain.HourWeather
@@ -7,6 +8,7 @@ import com.herbivores.climax.models.domain.celsius
 import java.time.Instant
 import java.time.ZoneId
 
+@Keep
 data class List (
     @SerializedName("dt")
     var dt: Int? = null,

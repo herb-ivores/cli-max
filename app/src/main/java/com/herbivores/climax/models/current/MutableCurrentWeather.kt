@@ -1,5 +1,6 @@
 package com.herbivores.climax.models.current
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 import com.herbivores.climax.constants.WeatherApi
 import com.herbivores.climax.models.domain.CurrentWeather
@@ -9,6 +10,7 @@ import com.herbivores.climax.models.domain.meters
 import java.time.Instant
 import java.time.ZoneId
 
+@Keep
 data class MutableCurrentWeather(
     @SerializedName("coord")
     var coord: Coord? = Coord(),

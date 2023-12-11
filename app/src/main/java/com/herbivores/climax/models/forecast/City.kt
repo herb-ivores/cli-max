@@ -1,8 +1,9 @@
 package com.herbivores.climax.models.forecast
 
+import androidx.annotation.Keep
 import com.google.gson.annotations.SerializedName
 
-
+@Keep
 data class City(
     @SerializedName("id")
     var id: Int? = null,
