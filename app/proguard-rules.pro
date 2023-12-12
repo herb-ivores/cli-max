@@ -20,6 +20,23 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--dontnote okhttp3.**, okio.**, retrofit2.**
--dontwarn retrofit2.**
+# Retrofit
 -keep class retrofit2.** { *; }
+
+# OkHttp
+-keep class okhttp3.** { *; }
+
+# Gson
+-keep class com.google.gson.** { *; }
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-dontwarn sun.misc.**
+-keep class com.google.gson.examples.android.model.** { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
+
+ -keep,allowobfuscation,allowshrinking interface retrofit2.Call
+ -keep,allowobfuscation,allowshrinking class retrofit2.Response
+ -keep,allowobfuscation,allowshrinking class kotlin.coroutines.Continuation
