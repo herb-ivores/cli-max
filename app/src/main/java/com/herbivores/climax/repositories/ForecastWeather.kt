@@ -1,7 +1,7 @@
 package com.herbivores.climax.repositories
 
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.forecast.MutableForecastWeather
+import com.herbivores.climax.models.retrofit.forecast.MutableForecastWeather
 import retrofit2.http.GET
 import retrofit2.http.Query
 

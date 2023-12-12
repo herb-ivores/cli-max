@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hamthelegend.enchantmentorder.extensions.mapToStateFlow
 import com.herbivores.climax.apiclient.ApiState
-import com.herbivores.climax.models.domain.CurrentWeather
-import com.herbivores.climax.models.domain.DayWeather
-import com.herbivores.climax.models.domain.ForecastWeather
+import com.herbivores.climax.models.domain.current.CurrentWeather
+import com.herbivores.climax.models.domain.forecast.DayWeather
+import com.herbivores.climax.models.domain.forecast.ForecastWeather
 import com.herbivores.climax.models.domain.Location
 import com.herbivores.climax.repositories.WeatherRepository
 import kotlinx.coroutines.Dispatchers

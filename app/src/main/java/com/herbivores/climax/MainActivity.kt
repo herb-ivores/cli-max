@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Surface
-import com.herbivores.climax.ui.screens.home.Home
+import com.herbivores.climax.ui.homescreen.Home
 import com.herbivores.climax.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
