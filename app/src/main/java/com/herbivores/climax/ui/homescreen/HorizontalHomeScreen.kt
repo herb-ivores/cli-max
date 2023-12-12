@@ -24,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.KeyboardArrowDown
 import androidx.compose.material.icons.twotone.KeyboardArrowUp
+import androidx.compose.material.icons.twotone.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -47,6 +48,8 @@ import com.herbivores.climax.models.domain.forecast.HourWeather
 import com.herbivores.climax.models.domain.meters
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.FilledTonalButton
+import com.thebrownfoxx.components.FilledTonalIconButton
+import com.thebrownfoxx.components.HorizontalSpacer
 import com.thebrownfoxx.components.VerticalSpacer
 import com.thebrownfoxx.components.extension.StatusBarHeight
 import com.thebrownfoxx.components.extension.plus
@@ -131,13 +134,21 @@ fun HorizontalHomeScreen(
                                     )
                                 }
                             }
-                            FilledTonalButton(
-                                icon = expanderIcon,
-                                iconContentDescription = "$expanderText icon",
-                                text = expanderText,
-                                onClick = onToggleCurrentWeatherExpanded,
-                                modifier = Modifier.fillMaxWidth(),
-                            )
+                            Row {
+                                FilledTonalButton(
+                                    icon = expanderIcon,
+                                    iconContentDescription = "$expanderText icon",
+                                    text = expanderText,
+                                    onClick = onToggleCurrentWeatherExpanded,
+                                    modifier = Modifier.weight(1f),
+                                )
+                                HorizontalSpacer(width = 8.dp)
+                                FilledTonalIconButton(
+                                    imageVector = Icons.TwoTone.Refresh,
+                                    onClick = onReload,
+                                    contentDescription = "Refresh",
+                                )
+                            }
                         }
                     }
                 }
@@ -165,7 +176,7 @@ fun HorizontalHomeScreen(
                                     )
                                 }
                             } else if (forecastWeatherState is ApiState.Loading) {
-                                items(5) {
+                                items(6) {
                                     DayWeatherCard(
                                         dayWeather = null,
                                         expanded = false,
