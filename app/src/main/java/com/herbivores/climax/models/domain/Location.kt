@@ -13,14 +13,19 @@ data class Location(
                 longitude = 120.5946389,
             ),
             Location(
+                name = "Floridablanca",
+                latitude = 15.012925,
+                longitude = 120.840504,
+            ),
+            Location(
                 name = "San Luis",
                 latitude = 15.012925,
                 longitude = 120.840504,
             ),
             Location(
-                name = "Floridablanca",
-                latitude = 15.012925,
-                longitude = 120.840504,
+                name = "Lubao",
+                latitude = 14.9130566,
+                longitude = 120.5653790,
             ),
             Location(
                 name = "Mabalacat",
@@ -36,6 +41,16 @@ data class Location(
                 name = "New York",
                 latitude = 40.7629269,
                 longitude = -73.9829357,
+            ),
+            Location(
+                name = "Russia",
+                latitude = 61.5891845,
+                longitude = 106.5970544,
+            ),
+            Location(
+                name = "Ukraine",
+                latitude = 50.4404392,
+                longitude = 30.5805077,
             ),
         )
     }
