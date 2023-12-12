@@ -1,6 +1,7 @@
 package com.herbivores.climax.ui.homescreen
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -33,49 +34,46 @@ fun LocationPicker(
     location: Location,
     locations: List<Location>,
     selectingLocation: Boolean,
-    onClick: () -> Unit,
+    onToggleSelectingLocation: () -> Unit,
     onLocationSelect: (Location) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        modifier = modifier,
-        onClick = onClick,
-    ) {
-        Column {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(16.dp),
-            ) {
-                Icon(imageVector = Icons.TwoTone.LocationOn, contentDescription = "Location icon")
-                HorizontalSpacer(width = 16.dp)
-                Text(
-                    text = location.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.weight(1f),
-                )
-                Icon(
-                    imageVector = Icons.TwoTone.ArrowDropDown,
-                    contentDescription = "Dropdown icon",
-                )
-            }
-            AnimatedVisibility(visible = selectingLocation) {
-                Column {
-                    for (locationSelection in locations) {
-                        Surface(
-                            tonalElevation = Elevation.level(2),
-                            onClick = { onLocationSelect(locationSelection) },
+    Card(modifier = modifier) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable(onClick = onToggleSelectingLocation)
+                .padding(16.dp),
+        ) {
+            Icon(imageVector = Icons.TwoTone.LocationOn, contentDescription = "Location icon")
+            HorizontalSpacer(width = 16.dp)
+            Text(
+                text = location.name,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(
+                imageVector = Icons.TwoTone.ArrowDropDown,
+                contentDescription = "Dropdown icon",
+            )
+        }
+        AnimatedVisibility(visible = selectingLocation) {
+            Column {
+                for (locationSelection in locations) {
+                    Surface(
+                        tonalElevation = Elevation.level(2),
+                        onClick = { onLocationSelect(locationSelection) },
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(16.dp),
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(16.dp),
-                            ) {
-                                HorizontalSpacer(width = (40).dp)
-                                Text(
-                                    text = locationSelection.name,
-                                    style = MaterialTheme.typography.titleSmall,
-                                    modifier = Modifier.weight(1f),
-                                )
-                            }
+                            HorizontalSpacer(width = (40).dp)
+                            Text(
+                                text = locationSelection.name,
+                                style = MaterialTheme.typography.titleSmall,
+                                modifier = Modifier.weight(1f),
+                            )
                         }
                     }
                 }
@@ -95,7 +93,7 @@ fun LocationPickerPreview() {
             location = remember { Location.Samples.first() },
             locations = remember { Location.Samples - Location.Samples.first() },
             selectingLocation = false,
-            onClick = {},
+            onToggleSelectingLocation = {},
             onLocationSelect = {},
         )
     }
@@ -112,7 +110,7 @@ fun LocationPickerExpandedPreview() {
             location = remember { Location.Samples.first() },
             locations = remember { Location.Samples - Location.Samples.first() },
             selectingLocation = true,
-            onClick = {},
+            onToggleSelectingLocation = {},
             onLocationSelect = {},
         )
     }

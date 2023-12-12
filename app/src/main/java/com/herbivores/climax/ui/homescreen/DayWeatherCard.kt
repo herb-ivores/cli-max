@@ -32,12 +32,12 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.herbivores.climax.constants.WeatherApi
-import com.herbivores.climax.models.domain.forecast.DayWeather
 import com.herbivores.climax.models.domain.Direction
-import com.herbivores.climax.models.domain.forecast.HourWeather
 import com.herbivores.climax.models.domain.Temperature
 import com.herbivores.climax.models.domain.Wind
 import com.herbivores.climax.models.domain.celsius
+import com.herbivores.climax.models.domain.forecast.DayWeather
+import com.herbivores.climax.models.domain.forecast.HourWeather
 import com.herbivores.climax.ui.theme.AppTheme
 import com.thebrownfoxx.components.HorizontalSpacer
 import com.thebrownfoxx.components.extension.minus
@@ -76,6 +76,8 @@ fun DayWeatherCard(
     val sunset = dayWeatherToShow?.sunset
         ?.format(DateTimeFormatter.ofPattern("h:mm a")) ?: "6:09 pm"
 
+    var loaded by rememberMutableStateOf(false)
+
     Card(
         modifier = modifier,
         onClick = { onClick() },
@@ -88,8 +90,9 @@ fun DayWeatherCard(
                 AsyncImage(
                     model = dayWeatherToShow?.iconUrl,
                     contentDescription = "Weather icon",
+                    onSuccess = { loaded = true },
                     modifier = Modifier
-                        .placeholder(dayWeatherToShow == null)
+                        .placeholder(!loaded)
                         .size(24.dp),
                 )
                 HorizontalSpacer(width = 16.dp)

@@ -1,5 +1,6 @@
 package com.herbivores.climax.ui.homescreen
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -8,7 +9,7 @@ import com.herbivores.climax.repositories.WeatherRepository
 import com.herbivores.climax.ui.viewmodels.HomeViewModel
 
 @Composable
-fun Home() {
+fun Home(windowWidthSizeClass: WindowWidthSizeClass = WindowWidthSizeClass.Compact) {
     val viewModel = viewModel { HomeViewModel(WeatherRepository()) }
 
     val location by viewModel.location.collectAsStateWithLifecycle()
@@ -32,5 +33,6 @@ fun Home() {
         selectedDay = selectedDay,
         onSelectedDayChange = viewModel::updateSelectedDay,
         onReload = viewModel::reload,
+        windowWidthSizeClass = windowWidthSizeClass
     )
 }

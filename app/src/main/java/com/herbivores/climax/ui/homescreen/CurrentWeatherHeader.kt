@@ -12,12 +12,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewDynamicColors
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.herbivores.climax.models.domain.current.CurrentWeather
 import com.herbivores.climax.models.domain.Direction
 import com.herbivores.climax.models.domain.Wind
@@ -44,11 +46,14 @@ fun CurrentWeatherHeader(
 
     val currentWeatherToShow = currentWeather ?: previousCurrentWeather
 
-    Row(modifier = modifier) {
+    Row(
+        modifier = Modifier
+            .placeholder(visible = currentWeather == null)
+            .then(modifier),
+    ) {
         Column(
             modifier = Modifier
-                .weight(1f)
-                .placeholder(visible = currentWeather == null),
+                .weight(1f),
         ) {
             Text(
                 text = "${currentWeatherToShow?.temperature?.celsius ?: 69}°",
@@ -64,7 +69,10 @@ fun CurrentWeatherHeader(
             )
         }
         AsyncImage(
-            model = currentWeatherToShow?.iconUrl,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(currentWeatherToShow?.iconUrl)
+                .crossfade(true)
+                .build(),
             contentDescription = "Weather icon",
             modifier = Modifier.size(128.dp),
         )
