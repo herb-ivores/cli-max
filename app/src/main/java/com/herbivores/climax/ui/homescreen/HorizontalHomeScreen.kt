@@ -117,7 +117,7 @@ fun HorizontalHomeScreen(
                             Column {
                                 CurrentWeatherHeader(
                                     currentWeather = currentWeather,
-                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                    modifier = Modifier.padding(start = 16.dp, end = 0.dp),
                                 )
                                 VerticalSpacer(height = 16.dp)
                                 AnimatedVisibility(visible = currentWeatherExpanded) {
