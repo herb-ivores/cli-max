@@ -12,8 +12,8 @@ android {
         applicationId = "com.herbivores.climax"
         minSdk = 27
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.4"
+        versionCode = 6
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

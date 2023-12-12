@@ -34,10 +34,10 @@ data class MutableForecastWeather(
                 maxTemperature = (hourWeatherList.maxOfOrNull { it.main?.tempMax ?: 0.0 } ?:0.0).celsius,
                 maxFeelsLike = (hourWeatherList.maxOfOrNull { it.main?.feelsLike ?: 0.0 } ?: 0.0).celsius,
                 wind = hourWeatherList.map { it.wind?.toWind() }.maxByOrNull { it?.speedMetersPerSecond ?: 0.0 }?: Wind().toWind(),
-                sunrise = Instant.ofEpochSecond(City().sunrise?.toLong()?:0)
+                sunrise = Instant.ofEpochSecond(city?.sunrise?.toLong()?:0)
                     .atZone(ZoneId.systemDefault())
                     .toLocalTime(),
-                sunset = Instant.ofEpochSecond(City().sunset?.toLong()?:0)
+                sunset = Instant.ofEpochSecond(city?.sunset?.toLong()?:0)
                     .atZone(ZoneId.systemDefault())
                     .toLocalTime(),
                 hourlyWeather = hourWeatherList.map { it.toHourWeather() },
